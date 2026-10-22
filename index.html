@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebBloom — Ideas Bloom on the Web</title>
+  
+  <!-- Google Fonts: Fraunces (Editorial Serif) & Plus Jakarta Sans (Clean Modern Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       CSS RESET & DESIGN TOKENS
+       ========================================================= */
+    :root {
+      --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      
+      --color-brand-dark: #123424;
+      --color-brand-primary: #18442e;
+      --color-brand-accent: #78c332;
+      --color-brand-accent-glow: rgba(120, 195, 50, 0.35);
+      
+      --color-bg-ivory: #faf7f0;
+      --color-bg-card: rgba(252, 250, 246, 0.88);
+      --color-border-card: rgba(255, 255, 255, 0.72);
+      
+      --color-text-dark: #16241a;
+      --color-text-muted: #56675b;
+      --color-text-light: #f5f7f4;
+      
+      --glass-blur: blur(24px);
+      --card-radius: 20px;
+      --pill-radius: 9999px;
+      
+      --shadow-subtle: 0 10px 30px -10px rgba(10, 25, 16, 0.12);
+      --shadow-card: 0 20px 45px -12px rgba(14, 34, 22, 0.16), 0 2px 6px rgba(0,0,0,0.04);
+      --shadow-elevated: 0 30px 60px -15px rgba(0, 0, 0, 0.28);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100%;
+      background-color: #06090e;
+      color: var(--color-text-light);
+      font-family: var(--font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* Scroll track: 380vh for smooth, natural scrubbing distance */
+    .scroll-track {
+      position: relative;
+      width: 100%;
+      height: 380vh;
+      background: transparent;
+    }
+
+    /* Pinned Fullscreen Viewport Stage (Always covers 100% of viewport) */
+    .viewport-stage {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      pointer-events: none;
+      z-index: 10;
+      will-change: transform;
+    }
+
+    /* =========================================================
+       CANVAS CINEMATIC ENGINE
+       ========================================================= */
+    .canvas-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+      background-color: #06090e;
+    }
+
+    #scrollCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* =========================================================
+       NAVIGATION BAR
+       ========================================================= */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 48px;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: auto;
+    }
+
+    .navbar.scrolled-page {
+      background: rgba(247, 244, 236, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(30, 44, 32, 0.08);
+      box-shadow: 0 4px 24px rgba(30, 44, 32, 0.05);
+      padding: 16px 48px;
+    }
+
+    .navbar.scrolled-page .nav-links {
+      background: rgba(255, 255, 255, 0.72);
+      border-color: rgba(30, 44, 32, 0.08);
+      box-shadow: 0 4px 16px rgba(30, 44, 32, 0.04);
+    }
+
+    .navbar.scrolled-page .nav-links a {
+      color: #27392a;
+    }
+
+    .navbar.scrolled-page .nav-links a:hover {
+      color: #122014;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .nav-brand-logo {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+      transition: transform 0.3s ease;
+    }
+
+    .nav-brand:hover .nav-brand-logo {
+      transform: scale(1.04);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      padding: 10px 24px;
+      border-radius: var(--pill-radius);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.85);
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* Pill Button Component */
+    .btn-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 26px;
+      border-radius: var(--pill-radius);
+      font-family: var(--font-sans);
+      font-size: 14.5px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border: none;
+      outline: none;
+      white-space: nowrap;
+    }
+
+    .btn-pill-primary {
+      background-color: var(--color-brand-primary);
+      color: #ffffff;
+      box-shadow: 0 4px 18px rgba(24, 68, 46, 0.35);
+    }
+
+    .btn-pill-primary:hover {
+      background-color: #123523;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(24, 68, 46, 0.45);
+    }
+
+    .btn-pill-accent {
+      background-color: var(--color-brand-accent);
+      color: #123424;
+      box-shadow: 0 4px 20px var(--color-brand-accent-glow);
+    }
+
+    .btn-pill-accent:hover {
+      background-color: #88d73b;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(120, 195, 50, 0.5);
+    }
+
+    .btn-pill-glass {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+
+    .btn-pill-glass:hover {
+      background: rgba(255, 255, 255, 0.22);
+      transform: translateY(-2px);
+    }
+
+    /* Clean Pill Badge */
+    .pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 18px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: var(--pill-radius);
+      font-size: 13.5px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: #f1f6f2;
+      margin-bottom: 24px;
+      width: fit-content;
+    }
+
+    .pill-badge-icon {
+      color: var(--color-brand-accent);
+      display: flex;
+      align-items: center;
+    }
+
+    /* =========================================================
+       STAGE CONTENT
+       ========================================================= */
+    .stage-content {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* INTRO STAGE (0% - 25% Scroll) */
+    .hero-intro {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 80px 100px 80px;
+      max-width: 960px;
+      pointer-events: auto;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      will-change: opacity, transform;
+    }
+
+    .hero-title {
+      font-family: var(--font-serif);
+      font-size: clamp(48px, 6vw, 76px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 24px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: #d8f5c0;
+      font-weight: 300;
+    }
+
+    .hero-desc {
+      font-size: clamp(16px, 1.8vw, 20px);
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 580px;
+      margin-bottom: 36px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      font-weight: 400;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* =========================================================
+       STAGE 2: BRAND LOGO REVEAL (70% - 100% Scroll)
+       ========================================================= */
+    .hero-outro {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 25;
+      transition: opacity 0.3s ease;
+      will-change: opacity, transform;
+    }
+
+    .hero-outro.active {
+      pointer-events: auto;
+    }
+
+    /* Soft ambient backdrop to dim & blur the video screen behind the logo */
+    .brand-reveal-backdrop {
+      position: absolute;
+      inset: -100px;
+      background: radial-gradient(circle at center, rgba(16, 32, 22, 0.92) 0%, rgba(6, 10, 14, 0.97) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Centered premium frosted logo card */
+    .brand-reveal-card {
+      position: relative;
+      z-index: 2;
+      background: rgba(252, 250, 246, 0.94);
+      backdrop-filter: blur(28px);
+      -webkit-backdrop-filter: blur(28px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 32px;
+      padding: 46px 64px 42px 64px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(24, 68, 46, 0.06);
+      text-align: center;
+      max-width: 660px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translateY(20px) scale(0.96);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+      pointer-events: auto;
+    }
+
+    .brand-reveal-card:hover {
+      box-shadow: 0 35px 75px -15px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(120, 195, 50, 0.2);
+    }
+
+    .brand-logo-container {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-reveal-logo {
+      height: 72px;
+      width: auto;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 16px rgba(24, 68, 46, 0.16));
+    }
+
+    .brand-reveal-slogan {
+      font-family: var(--font-serif);
+      font-size: clamp(28px, 3.2vw, 38px);
+      font-weight: 500;
+      color: var(--color-brand-dark);
+      letter-spacing: -0.015em;
+      margin-bottom: 12px;
+      line-height: 1.15;
+    }
+
+    .brand-reveal-subtext {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--color-text-muted);
+      max-width: 480px;
+      margin-bottom: 26px;
+    }
+
+    .brand-reveal-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    /* =========================================================
+       BOTTOM HUD & SCROLL CONTROLS
+       ========================================================= */
+    .hud-controls {
+      position: relative;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 48px 24px 48px;
+      pointer-events: none;
+    }
+
+    .scroll-cue {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(18, 28, 22, 0.58);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 8px 18px;
+      border-radius: var(--pill-radius);
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 13px;
+      font-weight: 500;
+      pointer-events: auto;
+      transition: opacity 0.3s ease;
+    }
+
+    .mouse-icon {
+      width: 16px;
+      height: 24px;
+      border: 2px solid rgba(255, 255, 255, 0.7);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .mouse-wheel {
+      width: 2px;
+      height: 5px;
+      background: #ffffff;
+      border-radius: 1px;
+      position: absolute;
+      top: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: mouseScroll 1.8s infinite ease-in-out;
+    }
+
+    @keyframes mouseScroll {
+      0% { transform: translate(-50%, 0); opacity: 1; }
+      80% { transform: translate(-50%, 8px); opacity: 0; }
+      100% { transform: translate(-50%, 0); opacity: 0; }
+    }
+
+    .timeline-hud {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(18, 28, 22, 0.62);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      padding: 8px 20px;
+      border-radius: var(--pill-radius);
+      pointer-events: auto;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .hud-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    .scrub-track {
+      position: relative;
+      width: 140px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.18);
+      border-radius: 3px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .scrub-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #18442e, var(--color-brand-accent));
+      border-radius: 3px;
+      transition: width 0.05s linear;
+    }
+
+    .hud-percent {
+      font-size: 13px;
+      font-weight: 600;
+      color: #ffffff;
+      font-variant-numeric: tabular-nums;
+      min-width: 42px;
+      text-align: right;
+    }
+
+    .jump-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .jump-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* =========================================================
+       PAGE CONTENT (LOWER SECTION - EDITORIAL AESTHETIC)
+       ========================================================= */
+    .page-content {
+      position: relative;
+      z-index: 20;
+      background: linear-gradient(180deg, #f7f4ec 0%, #f4f0e4 25%, #f7f5ed 65%, #ede8dc 100%);
+      color: #1e2c22;
+      padding: 0 0 60px 0;
+      overflow: hidden;
+      box-shadow: 0 -25px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    .page-content section {
+      scroll-margin-top: 90px;
+    }
+
+    /* Ambient Warm Glows (Non-Islamic, Organic Sunset) */
+    .ambient-glow-1 {
+      position: absolute;
+      top: 60px;
+      right: -80px;
+      width: 720px;
+      height: 720px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(246, 224, 168, 0.4) 0%, rgba(244, 240, 228, 0) 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow-2 {
+      position: absolute;
+      top: 1400px;
+      left: -120px;
+      width: 680px;
+      height: 680px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(216, 232, 214, 0.45) 0%, rgba(244, 240, 228, 0) 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ---------------------------------------------------------
+       1. SIGNATURE EDITORIAL HERO SECTION (MATCHING REFERENCE IMAGE)
+       --------------------------------------------------------- */
+    .editorial-hero-section {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 120px 48px 90px 48px;
+    }
+
+    .editorial-hero-content {
+      max-width: 780px;
+      margin-bottom: 64px;
+    }
+
+    .editorial-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 18px;
+      border-radius: var(--pill-radius);
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: #2b3d2d;
+      box-shadow: 0 4px 14px rgba(35, 50, 36, 0.05);
+      margin-bottom: 24px;
+    }
+
+    .editorial-pill-badge .badge-icon {
+      color: #4a6345;
+    }
+
+    .editorial-main-title {
+      font-family: var(--font-serif);
+      font-size: clamp(44px, 5.2vw, 68px);
+      font-weight: 500;
+      line-height: 1.14;
+      letter-spacing: -0.025em;
+      color: #1e2c22;
+      margin-bottom: 22px;
+    }
+
+    .editorial-main-title em {
+      font-style: italic;
+      font-weight: 400;
+      color: #2b4530;
+    }
+
+    .editorial-subtitle {
+      font-family: var(--font-sans);
+      font-size: 16.5px;
+      line-height: 1.65;
+      color: #4a574e;
+      max-width: 540px;
+      margin-bottom: 34px;
+    }
+
+    .editorial-cta-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-pill-olive {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #3b4e36;
+      color: #ffffff;
+      padding: 13px 30px;
+      border-radius: var(--pill-radius);
+      font-family: var(--font-sans);
+      font-size: 14.5px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 4px 18px rgba(45, 62, 41, 0.22);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-pill-olive:hover {
+      background-color: #283925;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(45, 62, 41, 0.32);
+      color: #ffffff;
+    }
+
+    .btn-pill-cream {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: #ded7c5;
+      color: #263828;
+      padding: 13px 30px;
+      border-radius: var(--pill-radius);
+      font-family: var(--font-sans);
+      font-size: 14.5px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid rgba(38, 56, 40, 0.08);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .btn-pill-cream:hover {
+      background-color: #d4ccb8;
+      transform: translateY(-2px);
+      color: #18261a;
+    }
+
+    /* 3 Signature Frosted Cards (Directly matching reference image layout) */
+    .reference-cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      width: 100%;
+    }
+
+    .ref-frosted-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      border-radius: 26px;
+      padding: 34px 34px;
+      box-shadow: 0 10px 30px rgba(40, 52, 41, 0.05);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, background 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .ref-frosted-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 42px rgba(40, 52, 41, 0.1);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .ref-card-metric {
+      font-family: var(--font-serif);
+      font-size: clamp(42px, 4.2vw, 54px);
+      font-weight: 400;
+      color: #1e2c22;
+      line-height: 1.05;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .ref-card-title {
+      font-family: var(--font-sans);
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e2c22;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .ref-card-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #526256;
+    }
+
+    /* ---------------------------------------------------------
+       2. BENTO CAPABILITIES SECTION
+       --------------------------------------------------------- */
+    .section-bento {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 60px 48px 100px 48px;
+    }
+
+    .section-header-center {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 56px auto;
+    }
+
+    .section-tag {
+      display: inline-block;
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #4a6345;
+      margin-bottom: 14px;
+    }
+
+    .section-heading-serif {
+      font-family: var(--font-serif);
+      font-size: clamp(34px, 3.8vw, 48px);
+      font-weight: 500;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      color: #1e2c22;
+      margin-bottom: 16px;
+    }
+
+    .section-subtext-center {
+      font-size: 16px;
+      line-height: 1.65;
+      color: #526256;
+    }
+
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .bento-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      border-radius: 26px;
+      padding: 36px 34px;
+      box-shadow: 0 10px 30px rgba(40, 52, 41, 0.05);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .bento-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 44px rgba(40, 52, 41, 0.09);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .bento-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(59, 78, 54, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #3b4e36;
+      margin-bottom: 22px;
+    }
+
+    .bento-card-title {
+      font-family: var(--font-serif);
+      font-size: 24px;
+      font-weight: 500;
+      color: #1e2c22;
+      margin-bottom: 12px;
+      letter-spacing: -0.015em;
+    }
+
+    .bento-card-desc {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #526256;
+      margin-bottom: 24px;
+    }
+
+    .bento-pill-tag {
+      display: inline-block;
+      align-self: flex-start;
+      padding: 6px 14px;
+      border-radius: var(--pill-radius);
+      background: rgba(59, 78, 54, 0.08);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #354a32;
+    }
+
+    /* ---------------------------------------------------------
+       3. THREE-STEP JOURNEY SECTION
+       --------------------------------------------------------- */
+    .section-journey {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 60px 48px 100px 48px;
+    }
+
+    .journey-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .journey-step-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      border-radius: 26px;
+      padding: 36px 34px;
+      box-shadow: 0 10px 30px rgba(40, 52, 41, 0.05);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .journey-step-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px rgba(40, 52, 41, 0.09);
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    .journey-step-number {
+      font-family: var(--font-serif);
+      font-size: 38px;
+      font-weight: 400;
+      color: #3b4e36;
+      opacity: 0.85;
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+
+    .journey-step-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e2c22;
+      margin-bottom: 12px;
+    }
+
+    .journey-step-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #526256;
+    }
+
+    /* ---------------------------------------------------------
+       4. SELECTED WORKS (PORTFOLIO SHOWCASE)
+       --------------------------------------------------------- */
+    .section-works {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 60px 48px 100px 48px;
+    }
+
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .work-item-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      border-radius: 26px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(40, 52, 41, 0.05);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .work-item-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 44px rgba(40, 52, 41, 0.1);
+      background: rgba(255, 255, 255, 0.92);
+    }
+
+    .work-card-media {
+      width: 100%;
+      height: 200px;
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .work-card-media-bg1 {
+      background: linear-gradient(135deg, #2b4532 0%, #172a1e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.9);
+      font-family: var(--font-serif);
+      font-size: 24px;
+    }
+
+    .work-card-media-bg2 {
+      background: linear-gradient(135deg, #d8cfbe 0%, #b8ad98 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #243525;
+      font-family: var(--font-serif);
+      font-size: 24px;
+    }
+
+    .work-card-media-bg3 {
+      background: linear-gradient(135deg, #3d5644 0%, #768f76 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-family: var(--font-serif);
+      font-size: 24px;
+    }
+
+    .work-tags-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .work-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: #4a6345;
+      background: rgba(74, 99, 69, 0.08);
+      padding: 4px 10px;
+      border-radius: 9999px;
+    }
+
+    .work-title {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 500;
+      color: #1e2c22;
+      margin-bottom: 8px;
+    }
+
+    .work-desc {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #526256;
+      margin-bottom: 16px;
+    }
+
+    /* ---------------------------------------------------------
+       5. CLIENT TESTIMONIALS SECTION
+       --------------------------------------------------------- */
+    .section-testimonials {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 60px 48px 100px 48px;
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+
+    .testimonial-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.88);
+      border-radius: 26px;
+      padding: 40px 38px;
+      box-shadow: 0 10px 30px rgba(40, 52, 41, 0.05);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .quote-text {
+      font-family: var(--font-serif);
+      font-size: 21px;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #1e2c22;
+      margin-bottom: 28px;
+      letter-spacing: -0.01em;
+    }
+
+    .quote-author {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .author-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #3b4e36;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .author-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e2c22;
+    }
+
+    .author-role {
+      font-size: 13px;
+      color: #526256;
+    }
+
+    /* ---------------------------------------------------------
+       6. CALL TO ACTION BANNER SECTION
+       --------------------------------------------------------- */
+    .section-cta {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 60px 48px 110px 48px;
+    }
+
+    .cta-banner-card {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(248, 244, 234, 0.92) 100%);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 32px;
+      padding: 64px 56px;
+      text-align: center;
+      box-shadow: 0 16px 45px rgba(40, 52, 41, 0.08);
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .cta-heading {
+      font-family: var(--font-serif);
+      font-size: clamp(36px, 4.2vw, 52px);
+      font-weight: 500;
+      line-height: 1.15;
+      color: #1e2c22;
+      margin-bottom: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .cta-subtext {
+      font-size: 16.5px;
+      line-height: 1.6;
+      color: #4a574e;
+      max-width: 580px;
+      margin: 0 auto 36px auto;
+    }
+
+    .cta-actions-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    /* ---------------------------------------------------------
+       7. MODERN SITE FOOTER
+       --------------------------------------------------------- */
+    .site-footer {
+      position: relative;
+      z-index: 1;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 60px 48px 40px 48px;
+      border-top: 1px solid rgba(38, 56, 40, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .footer-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 36px;
+    }
+
+    .footer-brand-col {
+      max-width: 340px;
+    }
+
+    .footer-logo {
+      height: 34px;
+      width: auto;
+      margin-bottom: 16px;
+    }
+
+    .footer-desc {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #526256;
+    }
+
+    .footer-nav-cols {
+      display: flex;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .footer-col-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #1e2c22;
+      margin-bottom: 16px;
+    }
+
+    .footer-links-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .footer-links-list a {
+      color: #526256;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links-list a:hover {
+      color: #1e2c22;
+    }
+
+    .footer-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid rgba(38, 56, 40, 0.06);
+      font-size: 13px;
+      color: #647568;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* =========================================================
+       RESPONSIVE DESIGN
+       ========================================================= */
+    @media (max-width: 1024px) {
+      .navbar { padding: 18px 32px; }
+      .navbar.scrolled-page { padding: 14px 32px; }
+      .hero-intro { padding: 0 40px 80px 40px; }
+      .brand-reveal-card { padding: 36px 44px 34px 44px; max-width: 580px; }
+      .brand-reveal-logo { height: 60px; }
+      .editorial-hero-section { padding: 90px 32px 70px 32px; }
+      .reference-cards-row { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      .bento-grid { grid-template-columns: 1fr; }
+      .journey-steps-grid { grid-template-columns: 1fr; }
+      .works-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .section-bento, .section-journey, .section-works, .section-testimonials, .section-cta, .site-footer { padding: 50px 32px; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .navbar { padding: 14px 20px; }
+      .navbar.scrolled-page { padding: 12px 20px; }
+      .hero-intro { padding: 0 24px 60px 24px; }
+      .hero-outro { padding: 20px 16px; }
+      .brand-reveal-card { padding: 30px 22px 26px 22px; border-radius: 24px; }
+      .brand-reveal-logo { height: 48px; }
+      .brand-reveal-slogan { font-size: 26px; }
+      .hud-controls { padding: 12px 20px; }
+      .scroll-cue { display: none; }
+      
+      .editorial-hero-section { padding: 70px 20px 50px 20px; }
+      .editorial-main-title { font-size: 38px; }
+      .reference-cards-row { grid-template-columns: 1fr; gap: 14px; }
+      .ref-frosted-card { padding: 26px 24px; }
+      .ref-card-metric { font-size: 36px; }
+      .section-bento, .section-journey, .section-works, .section-testimonials, .section-cta { padding: 40px 20px 60px 20px; }
+      .cta-banner-card { padding: 40px 24px; }
+      .site-footer { padding: 40px 20px 30px 20px; }
+      .footer-top-row { flex-direction: column; gap: 28px; }
+      .footer-nav-cols { gap: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar (Fixed with Adaptive Frosted Glass) -->
+  <header class="navbar" id="navbar">
+    <a href="#" class="nav-brand" id="navBrand" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
+      <img src="assets/logo_cropped.png" alt="WebBloom" class="nav-brand-logo">
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#capabilities">Capabilities</a></li>
+      <li><a href="#workflow">Workflow</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <a href="#contact" class="btn-pill btn-pill-accent" onclick="scrollToContent(); return false;">Start a project</a>
+    </div>
+  </header>
+
+  <!-- Main Scrollable Track (Controls scroll progress) -->
+  <div class="scroll-track" id="scrollTrack">
+    
+    <!-- Pinned Fullscreen Viewport Stage -->
+    <div class="viewport-stage" id="viewportStage">
+
+      <!-- Background Canvas Container (Clean, Direct Video Display) -->
+      <div class="canvas-container">
+        <canvas id="scrollCanvas"></canvas>
+      </div>
+
+      <!-- Dynamic Stage Content -->
+      <main class="stage-content">
+
+        <!-- STAGE 1: INTRO COVER (0% - 25% Scroll) -->
+        <section class="hero-intro" id="heroIntro">
+          <div class="pill-badge">
+            <span class="pill-badge-icon">✦</span>
+            <span>Digital Craft & Experience Design</span>
+          </div>
+
+          <h1 class="hero-title">
+            From creative sparks<br>
+            to <em>blooming</em> reality
+          </h1>
+
+          <p class="hero-desc">
+            在星空与繁花交织的夜色中，每一行代码都在孕育独特的数字生命。我们为胸怀远见的品牌塑造兼具艺术美感与工程力量的网页封面与数字旗舰。
+          </p>
+
+          <div class="hero-cta-group">
+            <button class="btn-pill btn-pill-accent" onclick="scrollToContent()">
+              Explore Creations 
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <button class="btn-pill btn-pill-glass" onclick="scrollToContent()">
+              Our Philosophy
+            </button>
+          </div>
+        </section>
+
+        <!-- STAGE 2: BRAND LOGO REVEAL (70% - 100% Scroll) -->
+        <section class="hero-outro" id="heroOutro">
+          <div class="brand-reveal-backdrop"></div>
+          <div class="brand-reveal-card" id="brandCard">
+            <div class="brand-logo-container">
+              <img src="assets/logo_cropped.png" alt="WebBloom Logo" class="brand-reveal-logo">
+            </div>
+            <h2 class="brand-reveal-slogan">Ideas Bloom on the Web</h2>
+            <p class="brand-reveal-subtext">
+              从初次构想到全网绽放 · 赋予品牌经久不息的数字生命力
+            </p>
+            <div class="brand-reveal-actions">
+              <button class="btn-pill btn-pill-accent" onclick="scrollToContent()">
+                探索完整官网 · Explore Website
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <polyline points="19 12 12 19 5 12"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- Bottom HUD: Interactive Controls & Scroll Hint -->
+      <footer class="hud-controls">
+        
+        <!-- Animated Mouse Indicator (Click to jump to content) -->
+        <div class="scroll-cue" id="scrollCue" onclick="scrollToContent()" style="cursor: pointer;" title="点击直达正文内容">
+          <div class="mouse-icon">
+            <div class="mouse-wheel"></div>
+          </div>
+          <span id="scrollCueText">向下滚动推进视频 · Scroll down</span>
+        </div>
+
+        <!-- Interactive Timeline & Scrubber -->
+        <div class="timeline-hud">
+          <span class="hud-label">Cover Scrub</span>
+          <div class="scrub-track" id="scrubTrack" title="点击或拖动跳转进度">
+            <div class="scrub-fill" id="scrubFill"></div>
+          </div>
+          <span class="hud-percent" id="hudPercent">0%</span>
+          <button class="jump-btn" id="btnRestart" onclick="scrollToMilestone(0)">↺ 顶部</button>
+          <button class="jump-btn" id="btnExplore" onclick="scrollToContent()">浏览正文 ↓</button>
+        </div>
+
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- =========================================================
+       PAGE CONTENT (LOWER SECTION - EDITORIAL AESTHETIC)
+       ========================================================= -->
+  <div class="page-content" id="pageContent">
+
+    <!-- Ambient Warm Sunset Glows (Organic, non-Islamic) -->
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
+
+    <!-- ---------------------------------------------------------
+         1. SIGNATURE EDITORIAL HERO SHOWCASE (MATCHING REFERENCE IMAGE)
+         --------------------------------------------------------- -->
+    <section class="editorial-hero-section" id="overview">
+      <div class="editorial-hero-content">
+        <div class="editorial-pill-badge">
+          <span class="editorial-badge-icon">✦</span>
+          <span>How It Works · 创作哲学</span>
+        </div>
+
+        <h2 class="editorial-main-title">
+          From first spark<br>
+          to <em>blooming</em> presence
+        </h2>
+
+        <p class="editorial-subtitle">
+          A simple, thoughtful workflow helps ambitious brands craft fluid web experiences, capture global attention, and keep moving forward.
+        </p>
+
+        <div class="editorial-cta-group">
+          <a href="#contact" class="btn-pill-olive">
+            Start a project
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <a href="#capabilities" class="btn-pill-cream">
+            See the method
+          </a>
+        </div>
+      </div>
+
+      <!-- 3 Signature Frosted Cards (Directly matching media_1791445297111.png layout) -->
+      <div class="reference-cards-row">
+        
+        <div class="ref-frosted-card">
+          <div class="ref-card-metric">40+</div>
+          <h3 class="ref-card-title">Curated Systems</h3>
+          <p class="ref-card-desc">
+            Modular layout tokens and bespoke typography systems matched to your brand's ambitions so you always know where to start.
+          </p>
+        </div>
+
+        <div class="ref-frosted-card">
+          <div class="ref-card-metric">3 min</div>
+          <h3 class="ref-card-title">Fluid Motion</h3>
+          <p class="ref-card-desc">
+            60fps hardware-accelerated canvas animations keep each interaction tactile, natural, and effortless to repeat daily.
+          </p>
+        </div>
+
+        <div class="ref-frosted-card">
+          <div class="ref-card-metric">100%</div>
+          <h3 class="ref-card-title">Clear Progress</h3>
+          <p class="ref-card-desc">
+            Transparent sprint milestones, production-ready code delivery, and zero-compromise craft on every viewport.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------------
+         2. BENTO CAPABILITIES SECTION
+         --------------------------------------------------------- -->
+    <section class="section-bento" id="capabilities">
+      <div class="section-header-center">
+        <span class="section-tag">Capabilities · 核心能力</span>
+        <h2 class="section-heading-serif">Crafted for visual distinction and effortless flow</h2>
+        <p class="section-subtext-center">
+          我们将前沿工程逻辑融入温暖的人文排版，为每一个数字载体赋予经得起推敲的工艺质感。
+        </p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="bento-card">
+          <div class="bento-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3 class="bento-card-title">60fps Canvas Storytelling</h3>
+          <p class="bento-card-desc">
+            突破传统静态排版束缚，以微秒级帧序列渲染引擎打造丝滑的视差叙事体验，零丢帧、零等待。
+          </p>
+          <span class="bento-pill-tag">0ms Scrub Latency</span>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="4 7 4 4 20 4 20 7"></polyline>
+              <line x1="9" y1="20" x2="15" y2="20"></line>
+              <line x1="12" y1="4" x2="12" y2="20"></line>
+            </svg>
+          </div>
+          <h3 class="bento-card-title">Editorial Typography</h3>
+          <p class="bento-card-desc">
+            精选兼具复古手作温润感与现代屏显清晰度的 Fraunces 衬线字体，字里行间传递不可替代的高级感。
+          </p>
+          <span class="bento-pill-tag">Bespoke Serifs</span>
+        </div>
+
+        <div class="bento-card">
+          <div class="bento-card-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+          </div>
+          <h3 class="bento-card-title">Edge-Native Performance</h3>
+          <p class="bento-card-desc">
+            全球边缘加速节点与 4:4:4 全色彩空间直通，确保无论身处何地，页面均如丝绸般瞬时加载。
+          </p>
+          <span class="bento-pill-tag">Sub-Second Delivery</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------------
+         3. THREE-STEP JOURNEY SECTION
+         --------------------------------------------------------- -->
+    <section class="section-journey" id="workflow">
+      <div class="section-header-center">
+        <span class="section-tag">Workflow · 绽放路径</span>
+        <h2 class="section-heading-serif">A clear path from initial idea to live launch</h2>
+        <p class="section-subtext-center">
+          告别繁复杂乱的沟通周期，以明确的三阶段交付体系，让每一次创意迭代都胸有成竹。
+        </p>
+      </div>
+
+      <div class="journey-steps-grid">
+        <div class="journey-step-card">
+          <div class="journey-step-number">01</div>
+          <h3 class="journey-step-title">Brand DNA & Creative Spark</h3>
+          <p class="journey-step-desc">
+            深度梳理品牌核心价值与视觉语汇，提炼专属的色相、字体比例与交互基调，确立清晰的数字化旗舰目标。
+          </p>
+        </div>
+
+        <div class="journey-step-card">
+          <div class="journey-step-number">02</div>
+          <h3 class="journey-step-title">Motion Prototyping</h3>
+          <p class="journey-step-desc">
+            在真实的浏览器物理引擎中调试微交互与关键帧动力学，打磨出兼具弹性阻尼与精准手感的交互模型。
+          </p>
+        </div>
+
+        <div class="journey-step-card">
+          <div class="journey-step-number">03</div>
+          <h3 class="journey-step-title">Production & Global Bloom</h3>
+          <p class="journey-step-desc">
+            完成全端视口适配与严苛的性能压测，以工业级标准交付完整源代码，助推品牌在全网瞩目绽放。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------------
+         4. SELECTED WORKS SECTION
+         --------------------------------------------------------- -->
+    <section class="section-works" id="work">
+      <div class="section-header-center">
+        <span class="section-tag">Selected Works · 案例精选</span>
+        <h2 class="section-heading-serif">Thoughtful design, engineered to inspire</h2>
+        <p class="section-subtext-center">
+          每一个上线项目都是艺术品位与前沿工程深度碰撞的结晶。
+        </p>
+      </div>
+
+      <div class="works-grid">
+        <div class="work-item-card">
+          <div class="work-card-media work-card-media-bg1">
+            <span>Botanica Flora</span>
+          </div>
+          <div class="work-tags-row">
+            <span class="work-tag">Editorial</span>
+            <span class="work-tag">3D Motion</span>
+          </div>
+          <h3 class="work-title">Botanica Flora</h3>
+          <p class="work-desc">
+            为高端可持续植物美学工坊定制的叙事型数字旗舰，融合了微距植物形态与呼吸感视差滚动。
+          </p>
+        </div>
+
+        <div class="work-item-card">
+          <div class="work-card-media work-card-media-bg2">
+            <span>Aura Acoustics</span>
+          </div>
+          <div class="work-tags-row">
+            <span class="work-tag">Hardware</span>
+            <span class="work-tag">Canvas Scrub</span>
+          </div>
+          <h3 class="work-title">Aura Acoustics</h3>
+          <p class="work-desc">
+            为声学硬件品牌打造的高精互动拆解封面，通过用户滚轮实时探索精密声学腔体的内部构造。
+          </p>
+        </div>
+
+        <div class="work-item-card">
+          <div class="work-card-media work-card-media-bg3">
+            <span>Lumina Atelier</span>
+          </div>
+          <div class="work-tags-row">
+            <span class="work-tag">Architecture</span>
+            <span class="work-tag">Spatial Web</span>
+          </div>
+          <h3 class="work-title">Lumina Atelier</h3>
+          <p class="work-desc">
+            当代先锋建筑设计事务所的线上作品集，以纯净的留白与高对比度排版呈现空间的诗意张力。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------------
+         5. TESTIMONIALS SECTION
+         --------------------------------------------------------- -->
+    <section class="section-testimonials">
+      <div class="section-header-center">
+        <span class="section-tag">Voices · 客户心声</span>
+        <h2 class="section-heading-serif">Trusted by ambitious creative founders</h2>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <p class="quote-text">
+            “WebBloom 带来的不仅是一套震撼的滚动交互，更是对我们品牌格调的深刻理解。上线首月，我们的咨询转化率便提升了 140%。”
+          </p>
+          <div class="quote-author">
+            <div class="author-avatar">EV</div>
+            <div>
+              <div class="author-name">Elena Vance</div>
+              <div class="author-role">Founder & Creative Director, Solstice</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="testimonial-card">
+          <p class="quote-text">
+            “整个滚动过程非常自然，没有任何生硬的停顿或突兀的剪辑。那种温润质感的衬线字体与磨砂卡片搭配，完全呈现了我们想要的奢华底蕴。”
+          </p>
+          <div class="quote-author">
+            <div class="author-avatar">JT</div>
+            <div>
+              <div class="author-name">Julian Thorne</div>
+              <div class="author-role">Design Lead, Atelier Vesper</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------------
+         6. CALL TO ACTION SECTION
+         --------------------------------------------------------- -->
+    <section class="section-cta" id="contact">
+      <div class="cta-banner-card">
+        <span class="section-tag">Get Started · 开启合作</span>
+        <h2 class="cta-heading">Ready to bloom your next digital experience?</h2>
+        <p class="cta-subtext">
+          无论您正在筹备全新品牌发布，或是希望重塑现有数字旗舰，我们都期待与您一起探讨无限可能。
+        </p>
+        <div class="cta-actions-row">
+          <a href="mailto:hello@webbloom.design" class="btn-pill-olive">
+            Schedule a Consultation
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <button class="btn-pill-cream" onclick="scrollToMilestone(0)">
+            Back to Cover ↺
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------------------------------------------------------
+         7. SITE FOOTER
+         --------------------------------------------------------- -->
+    <footer class="site-footer">
+      <div class="footer-top-row">
+        <div class="footer-brand-col">
+          <img src="assets/logo_cropped.png" alt="WebBloom" class="footer-logo">
+          <p class="footer-desc">
+            WebBloom 专注于高级数字艺术呈现、帧级动画编排与高性能网站架构。让创意在代码的世界里如花朵般自然绽放。
+          </p>
+        </div>
+
+        <div class="footer-nav-cols">
+          <div>
+            <div class="footer-col-title">Navigation</div>
+            <ul class="footer-links-list">
+              <li><a href="#overview">Overview</a></li>
+              <li><a href="#capabilities">Capabilities</a></li>
+              <li><a href="#workflow">Workflow</a></li>
+              <li><a href="#work">Selected Works</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Studio</div>
+            <ul class="footer-links-list">
+              <li><a href="#about">About WebBloom</a></li>
+              <li><a href="#careers">Careers</a></li>
+              <li><a href="#press">Press & Media</a></li>
+              <li><a href="#contact">Contact Us</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <div class="footer-col-title">Connect</div>
+            <ul class="footer-links-list">
+              <li><a href="#">X / Twitter</a></li>
+              <li><a href="#">Instagram</a></li>
+              <li><a href="#">LinkedIn</a></li>
+              <li><a href="#">GitHub</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom-row">
+        <span>© 2026 WebBloom Design Studio. All rights reserved.</span>
+        <button class="jump-btn" style="color: #4a574e; background: rgba(0,0,0,0.05); padding: 6px 14px; border-radius: 9999px;" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          ↑ 返回顶部 · Top
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- High-Performance Canvas Engine (Pure Scroll-Scrubbed) -->
+  <script>
+    (function() {
+      const canvas = document.getElementById('scrollCanvas');
+      const ctx = canvas.getContext('2d', { alpha: false });
+      const scrollTrack = document.getElementById('scrollTrack');
+      const heroIntro = document.getElementById('heroIntro');
+      const heroOutro = document.getElementById('heroOutro');
+      const brandCard = document.getElementById('brandCard');
+      const scrubFill = document.getElementById('scrubFill');
+      const hudPercent = document.getElementById('hudPercent');
+      const scrollCue = document.getElementById('scrollCue');
+      const scrollCueText = document.getElementById('scrollCueText');
+      const scrubTrack = document.getElementById('scrubTrack');
+
+      // Preload 301 extracted frames
+      const TOTAL_FRAMES = 301;
+      const images = new Array(TOTAL_FRAMES);
+      let lastDrawnIndex = 0;
+
+      for (let i = 1; i <= TOTAL_FRAMES; i++) {
+        const img = new Image();
+        const paddedIndex = String(i).padStart(4, '0');
+        img.src = `assets/frames/frame_${paddedIndex}.jpg`;
+        if (i === 1) {
+          img.onload = () => renderFrame(0);
+          if (img.complete) renderFrame(0);
+        }
+        images[i - 1] = img;
+      }
+
+      // Resize canvas for sharp Retina / HiDPI display
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = Math.round(window.innerWidth * dpr);
+        canvas.height = Math.round(window.innerHeight * dpr);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        renderFrame(lastDrawnIndex);
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      // Draw frame with object-fit: cover logic
+      function renderFrame(index) {
+        lastDrawnIndex = index;
+        const img = images[index];
+        if (!img || !img.complete || img.naturalWidth === 0) {
+          for (let offset = 1; offset < 10; offset++) {
+            const fallback = images[index - offset] || images[index + offset];
+            if (fallback && fallback.complete && fallback.naturalWidth > 0) {
+              drawCover(fallback);
+              return;
+            }
+          }
+          return;
+        }
+        drawCover(img);
+      }
+
+      function drawCover(img) {
+        const cw = canvas.width;
+        const ch = canvas.height;
+        const imgRatio = img.naturalWidth / img.naturalHeight;
+        const canvasRatio = cw / ch;
+
+        let dw, dh, dx, dy;
+        if (canvasRatio > imgRatio) {
+          dw = cw;
+          dh = cw / imgRatio;
+          dx = 0;
+          dy = (ch - dh) / 2;
+        } else {
+          dw = ch * imgRatio;
+          dh = ch;
+          dx = (cw - dw) / 2;
+          dy = 0;
+        }
+
+        ctx.drawImage(img, dx, dy, dw, dh);
+      }
+
+      // Smooth scroll state
+      let targetProgress = 0;
+      let currentProgress = 0;
+      let isDraggingScrubber = false;
+
+      const navbar = document.getElementById('navbar');
+      const viewportStage = document.getElementById('viewportStage');
+
+      function updateScrollFraction() {
+        if (isDraggingScrubber) return;
+        const totalScroll = scrollTrack.offsetHeight - window.innerHeight;
+        if (totalScroll <= 0) return;
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        targetProgress = Math.min(Math.max(scrollY / totalScroll, 0), 1);
+
+        // While scrolling cover (0% - 100%): perfectly pinned fullscreen
+        // When scrolling past cover into page content: smoothly translates up
+        if (scrollY > totalScroll) {
+          const pastCover = scrollY - totalScroll;
+          viewportStage.style.transform = `translateY(-${pastCover}px)`;
+          viewportStage.style.visibility = pastCover >= window.innerHeight ? 'hidden' : 'visible';
+          if (navbar) navbar.classList.add('scrolled-page');
+        } else {
+          viewportStage.style.transform = 'translateY(0)';
+          viewportStage.style.visibility = 'visible';
+          if (navbar) navbar.classList.remove('scrolled-page');
+        }
+      }
+
+      window.addEventListener('scroll', updateScrollFraction, { passive: true });
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        updateScrollFraction();
+      });
+      updateScrollFraction();
+
+      // Click / Drag Scrubber
+      function handleScrubInteract(e) {
+        const rect = scrubTrack.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const fraction = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
+        
+        targetProgress = fraction;
+        currentProgress = fraction;
+        
+        const totalScroll = scrollTrack.offsetHeight - window.innerHeight;
+        window.scrollTo({
+          top: fraction * totalScroll,
+          behavior: 'auto'
+        });
+      }
+
+      scrubTrack.addEventListener('mousedown', function(e) {
+        isDraggingScrubber = true;
+        handleScrubInteract(e);
+        function onMouseMove(moveEvent) {
+          if (isDraggingScrubber) handleScrubInteract(moveEvent);
+        }
+        function onMouseUp() {
+          isDraggingScrubber = false;
+          window.removeEventListener('mousemove', onMouseMove);
+          window.removeEventListener('mouseup', onMouseUp);
+        }
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
+      });
+
+      scrubTrack.addEventListener('touchstart', function(e) {
+        isDraggingScrubber = true;
+        handleScrubInteract(e);
+      }, { passive: true });
+
+      window.addEventListener('touchmove', function(e) {
+        if (isDraggingScrubber) handleScrubInteract(e);
+      }, { passive: true });
+
+      window.addEventListener('touchend', function() {
+        isDraggingScrubber = false;
+      });
+
+
+
+      function renderLoop() {
+        // Damping factor (0.14) for buttery-smooth inertial response
+        const lerpFactor = 0.14;
+        currentProgress += (targetProgress - currentProgress) * lerpFactor;
+
+        if (Math.abs(targetProgress - currentProgress) < 0.0005) {
+          currentProgress = targetProgress;
+        }
+
+        // Frame index strictly determined by scroll progress
+        const targetFrameIndex = Math.min(
+          Math.max(Math.round(currentProgress * (TOTAL_FRAMES - 1)), 0),
+          TOTAL_FRAMES - 1
+        );
+
+        renderFrame(targetFrameIndex);
+
+        // 2. HUD Scrubber Update
+        const percentStr = Math.round(currentProgress * 100) + '%';
+        scrubFill.style.width = percentStr;
+        hudPercent.textContent = percentStr;
+
+        // 3. Stage 1: Intro Cover Transition (0% ~ 22%)
+        const introFadeEnd = 0.22;
+        if (currentProgress <= introFadeEnd) {
+          const introNorm = currentProgress / introFadeEnd;
+          const introOpacity = Math.max(0, 1 - introNorm);
+          const introTranslate = -introNorm * 36;
+          heroIntro.style.opacity = introOpacity;
+          heroIntro.style.transform = `translateY(${introTranslate}px)`;
+          heroIntro.style.pointerEvents = introOpacity > 0.1 ? 'auto' : 'none';
+        } else {
+          heroIntro.style.opacity = '0';
+          heroIntro.style.pointerEvents = 'none';
+        }
+
+        // 4. Stage 2: Outro Brand Logo Reveal (65% ~ 100%)
+        const outroStart = 0.65;
+        if (currentProgress >= outroStart) {
+          const outroNorm = Math.min(1, Math.max(0, (currentProgress - outroStart) / (0.88 - outroStart)));
+          const outroOpacity = outroNorm;
+          const outroTranslate = (1 - outroOpacity) * 20;
+          const outroScale = 0.94 + outroOpacity * 0.06;
+          
+          if (heroOutro) {
+            heroOutro.style.opacity = outroOpacity;
+            heroOutro.classList.toggle('active', outroOpacity > 0.05);
+            heroOutro.style.pointerEvents = outroOpacity > 0.4 ? 'auto' : 'none';
+          }
+          if (brandCard) {
+            brandCard.style.transform = `translateY(${outroTranslate}px) scale(${outroScale})`;
+          }
+        } else {
+          if (heroOutro) {
+            heroOutro.style.opacity = '0';
+            heroOutro.classList.remove('active');
+            heroOutro.style.pointerEvents = 'none';
+          }
+        }
+
+        // 5. Scroll Cue Text Update
+        if (currentProgress < 0.1) {
+          scrollCue.style.opacity = '1';
+          scrollCueText.textContent = '向下滚动推进视频 · Scroll down';
+        } else if (currentProgress > 0.88) {
+          scrollCue.style.opacity = '1';
+          scrollCueText.textContent = '继续向下滚动进入网站 · Scroll to enter website ↓';
+        } else {
+          scrollCue.style.opacity = '0.5';
+          scrollCueText.textContent = '滚动控制播放 · Scrubbing';
+        }
+
+        requestAnimationFrame(renderLoop);
+      }
+
+      requestAnimationFrame(renderLoop);
+
+      // Global jump helpers
+      window.scrollToMilestone = function(fraction) {
+        const totalScroll = scrollTrack.offsetHeight - window.innerHeight;
+        window.scrollTo({
+          top: fraction * totalScroll,
+          behavior: 'smooth'
+        });
+      };
+
+      window.scrollToEnd = function() {
+        window.scrollToMilestone(1);
+      };
+
+      window.scrollToContent = function() {
+        const el = document.getElementById('pageContent');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          window.scrollToMilestone(1);
+        }
+      };
+
+      // Smooth scroll navigation for in-page anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const target = this.getAttribute('href');
+          if (target && target.length > 1 && target !== '#') {
+            const el = document.querySelector(target);
+            if (el) {
+              e.preventDefault();
+              el.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+        });
+      });
+
+    })();
+  </script>
+</body>
+</html>
