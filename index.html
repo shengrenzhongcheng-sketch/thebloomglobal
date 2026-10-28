@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WebBloom — Ideas Bloom on the Web</title>
-  
-  <!-- Google Fonts: Fraunces (Editorial Serif) & Plus Jakarta Sans (Clean Modern Sans) -->
+  <meta name="description" content="WebBloom is a small web studio crafting cinematic, carefully built websites — designed, coded and launched in about three days.">
+  <meta property="og:title" content="WebBloom — Ideas Bloom on the Web">
+  <meta property="og:description" content="Cinematic, carefully built websites — designed, coded and launched in about three days.">
+  <meta property="og:image" content="https://thebloomglobal.com/assets/frames_desktop/f_151.webp">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="assets/logo_cropped.png">
+
+  <!-- Google Fonts: Cormorant Garamond (serif display) & Plus Jakarta Sans (sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
   <style>
     /* =========================================================
        CSS RESET & DESIGN TOKENS
        ========================================================= */
     :root {
-      --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+      --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
       --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       
       --color-brand-dark: #123424;
@@ -250,28 +256,24 @@
       transform: translateY(-2px);
     }
 
-    /* Clean Pill Badge */
-    .pill-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 18px;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      border-radius: var(--pill-radius);
-      font-size: 13.5px;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      color: #f1f6f2;
-      margin-bottom: 24px;
-      width: fit-content;
-    }
-
-    .pill-badge-icon {
-      color: var(--color-brand-accent);
+    /* Eyebrow above the cover title: small spaced caps after a short rule */
+    .hero-eyebrow {
       display: flex;
       align-items: center;
+      gap: 14px;
+      font-family: var(--font-sans);
+      font-size: 11.5px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: rgba(245, 199, 126, 0.9);
+      margin-bottom: 30px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: currentColor;
     }
 
     /* =========================================================
@@ -293,46 +295,70 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 0 80px 100px 80px;
-      max-width: 960px;
+      padding: 0 96px 90px 96px;
+      max-width: 860px;
       pointer-events: auto;
       transition: opacity 0.3s ease, transform 0.3s ease;
       will-change: opacity, transform;
     }
 
+    /* soft shade behind the text so it reads cleanly over the stars */
+    .hero-intro::before {
+      content: '';
+      position: absolute;
+      inset: -10% -40% -10% -20%;
+      background: radial-gradient(ellipse at 25% 50%, rgba(5, 10, 22, 0.55) 0%, rgba(5, 10, 22, 0.25) 40%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
     .hero-title {
       font-family: var(--font-serif);
-      font-size: clamp(48px, 6vw, 76px);
-      font-weight: 400;
-      line-height: 1.08;
-      letter-spacing: -0.02em;
+      font-size: clamp(42.6px, 4.6vw, 69.4px);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.01em;
       color: #ffffff;
-      margin-bottom: 24px;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      margin-bottom: 26px;
+      text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
     }
 
     .hero-title em {
       font-style: italic;
-      color: #d8f5c0;
+      color: #f5c77e;
       font-weight: 300;
     }
 
     .hero-desc {
-      font-size: clamp(16px, 1.8vw, 20px);
-      line-height: 1.6;
-      color: rgba(255, 255, 255, 0.88);
-      max-width: 580px;
-      margin-bottom: 36px;
-      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      font-size: 15.5px;
+      line-height: 1.75;
+      color: rgba(232, 236, 244, 0.72);
+      max-width: 420px;
+      margin-bottom: 40px;
       font-weight: 400;
     }
 
     .hero-cta-group {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 28px;
       flex-wrap: wrap;
     }
+
+    .hero-cta-group .btn-pill { padding: 11px 22px; font-size: 13.5px; }
+
+    .hero-link {
+      background: none;
+      border: 0;
+      padding: 6px 0;
+      font: 500 13.5px var(--font-sans);
+      color: rgba(232, 236, 244, 0.78);
+      border-bottom: 1px solid rgba(232, 236, 244, 0.3);
+      cursor: pointer;
+      transition: color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .hero-link:hover { color: #fff; border-color: #fff; }
 
     /* =========================================================
        STAGE 2: BRAND LOGO REVEAL (70% - 100% Scroll)
@@ -355,817 +381,1270 @@
       pointer-events: auto;
     }
 
-    /* Soft ambient backdrop to dim & blur the video screen behind the logo */
+    /* Opaque night sky behind the logo: fully hides the laptop screen,
+       same colour as the page below so the cover hands over seamlessly */
     .brand-reveal-backdrop {
       position: absolute;
       inset: -100px;
-      background: radial-gradient(circle at center, rgba(16, 32, 22, 0.92) 0%, rgba(6, 10, 14, 0.97) 100%);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      background: #0b1324;
       z-index: 1;
       pointer-events: none;
     }
 
-    /* Centered premium frosted logo card */
+    #outroStars {
+      position: absolute;
+      inset: 100px;
+      width: calc(100% - 200px);
+      height: calc(100% - 200px);
+    }
+
+    /* faint desk-lamp warmth behind the logo */
+    .brand-reveal-backdrop::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 900px;
+      height: 620px;
+      transform: translate(-50%, -52%);
+      background: radial-gradient(ellipse at center, rgba(245, 199, 126, 0.07) 0%, rgba(245, 199, 126, 0.02) 40%, transparent 70%);
+    }
+
+    /* No box: just typography and space */
     .brand-reveal-card {
       position: relative;
       z-index: 2;
-      background: rgba(252, 250, 246, 0.94);
-      backdrop-filter: blur(28px);
-      -webkit-backdrop-filter: blur(28px);
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      border-radius: 32px;
-      padding: 46px 64px 42px 64px;
-      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(24, 68, 46, 0.06);
       text-align: center;
-      max-width: 660px;
+      max-width: 820px;
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       transform: translateY(20px) scale(0.96);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: auto;
     }
 
-    .brand-reveal-card:hover {
-      box-shadow: 0 35px 75px -15px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(120, 195, 50, 0.2);
+    .brand-reveal-eyebrow {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(245, 199, 126, 0.85);
+      margin-bottom: 34px;
     }
 
     .brand-logo-container {
-      margin-bottom: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
     .brand-reveal-logo {
-      height: 72px;
+      height: 56px;
       width: auto;
       object-fit: contain;
-      filter: drop-shadow(0 6px 16px rgba(24, 68, 46, 0.16));
+    }
+
+    .brand-reveal-rule {
+      width: 1px;
+      height: 56px;
+      margin: 34px 0 30px 0;
+      background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.35), transparent);
     }
 
     .brand-reveal-slogan {
       font-family: var(--font-serif);
-      font-size: clamp(28px, 3.2vw, 38px);
+      font-size: clamp(44.8px, 5.8vw, 85.1px);
       font-weight: 500;
-      color: var(--color-brand-dark);
-      letter-spacing: -0.015em;
-      margin-bottom: 12px;
-      line-height: 1.15;
+      color: #f2f4f8;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+      line-height: 1.05;
+    }
+
+    .brand-reveal-slogan em {
+      font-style: italic;
+      color: #f5c77e;
     }
 
     .brand-reveal-subtext {
       font-size: 15px;
-      line-height: 1.6;
-      color: var(--color-text-muted);
-      max-width: 480px;
-      margin-bottom: 26px;
-    }
-
-    .brand-reveal-actions {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 14px;
+      line-height: 1.7;
+      letter-spacing: 0.06em;
+      color: rgba(232, 236, 244, 0.55);
+      max-width: 520px;
+      margin-bottom: 0;
     }
 
     /* =========================================================
-       BOTTOM HUD & SCROLL CONTROLS
+       PAGE CONTENT — NIGHT STUDIO
+       The cover is a starry night where a few people work under desk lamps.
+       The page continues that night and ends at dawn (launch).
        ========================================================= */
-    .hud-controls {
-      position: relative;
-      z-index: 50;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 18px 48px 24px 48px;
-      pointer-events: none;
+    :root {
+      /* small labels: the sans in spaced caps (no code-style mono) */
+      --font-mono: var(--font-sans);
+      --night: #0b1324;
+      --night-2: #0b1324;
+      --ink: #e8ecf4;
+      --ink-dim: rgba(232, 236, 244, 0.62);
+      --ink-faint: rgba(232, 236, 244, 0.38);
+      --line: rgba(255, 255, 255, 0.08);
+      --glass: rgba(15, 23, 40, 0.55);
+      --lamp: #f5c77e;
+      --lamp-glow: rgba(245, 199, 126, 0.18);
+      --leaf: #8fd14f;
     }
 
-    .scroll-cue {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(18, 28, 22, 0.58);
-      backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      padding: 8px 18px;
-      border-radius: var(--pill-radius);
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 13px;
-      font-weight: 500;
-      pointer-events: auto;
-      transition: opacity 0.3s ease;
+    /* Navbar once the cover has scrolled away: dark glass instead of cream */
+    .navbar.scrolled-page {
+      background: rgba(11, 19, 36, 0.78);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
     }
 
-    .mouse-icon {
-      width: 16px;
-      height: 24px;
-      border: 2px solid rgba(255, 255, 255, 0.7);
-      border-radius: 12px;
-      position: relative;
+    .navbar.scrolled-page .nav-links {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--line);
+      box-shadow: none;
     }
 
-    .mouse-wheel {
-      width: 2px;
-      height: 5px;
-      background: #ffffff;
-      border-radius: 1px;
-      position: absolute;
-      top: 4px;
-      left: 50%;
-      transform: translateX(-50%);
-      animation: mouseScroll 1.8s infinite ease-in-out;
-    }
+    .navbar.scrolled-page .nav-links a { color: var(--ink-dim); }
+    .navbar.scrolled-page .nav-links a:hover { color: #fff; }
 
-    @keyframes mouseScroll {
-      0% { transform: translate(-50%, 0); opacity: 1; }
-      80% { transform: translate(-50%, 8px); opacity: 0; }
-      100% { transform: translate(-50%, 0); opacity: 0; }
-    }
-
-    .timeline-hud {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      background: rgba(18, 28, 22, 0.62);
-      backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      padding: 8px 20px;
-      border-radius: var(--pill-radius);
-      pointer-events: auto;
-      box-shadow: var(--shadow-subtle);
-    }
-
-    .hud-label {
-      font-size: 12.5px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.65);
-    }
-
-    .scrub-track {
-      position: relative;
-      width: 140px;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.18);
-      border-radius: 3px;
-      cursor: pointer;
-      overflow: hidden;
-    }
-
-    .scrub-fill {
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, #18442e, var(--color-brand-accent));
-      border-radius: 3px;
-      transition: width 0.05s linear;
-    }
-
-    .hud-percent {
-      font-size: 13px;
-      font-weight: 600;
-      color: #ffffff;
-      font-variant-numeric: tabular-nums;
-      min-width: 42px;
-      text-align: right;
-    }
-
-    .jump-btn {
-      background: none;
-      border: none;
-      color: rgba(255, 255, 255, 0.7);
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 6px;
-      transition: all 0.2s;
-    }
-
-    .jump-btn:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.15);
-    }
-
-    /* =========================================================
-       PAGE CONTENT (LOWER SECTION - EDITORIAL AESTHETIC)
-       ========================================================= */
     .page-content {
       position: relative;
       z-index: 20;
-      background: linear-gradient(180deg, #f7f4ec 0%, #f4f0e4 25%, #f7f5ed 65%, #ede8dc 100%);
-      color: #1e2c22;
-      padding: 0 0 60px 0;
+      background: var(--night);
+      color: var(--ink);
       overflow: hidden;
-      box-shadow: 0 -25px 60px rgba(0, 0, 0, 0.35);
     }
 
     .page-content section {
-      scroll-margin-top: 90px;
+      position: relative;
+      z-index: 1;
+      scroll-margin-top: 80px;
     }
 
-    /* Ambient Warm Glows (Non-Islamic, Organic Sunset) */
-    .ambient-glow-1 {
-      position: absolute;
-      top: 60px;
-      right: -80px;
-      width: 720px;
-      height: 720px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(246, 224, 168, 0.4) 0%, rgba(244, 240, 228, 0) 70%);
-      filter: blur(80px);
+    /* Fixed sky behind the content: twinkling stars, night fading to dawn as you scroll */
+    #nightSky {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
       z-index: 0;
     }
 
-    .ambient-glow-2 {
-      position: absolute;
-      top: 1400px;
-      left: -120px;
-      width: 680px;
-      height: 680px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(216, 232, 214, 0.45) 0%, rgba(244, 240, 228, 0) 70%);
-      filter: blur(80px);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ---------------------------------------------------------
-       1. SIGNATURE EDITORIAL HERO SECTION (MATCHING REFERENCE IMAGE)
-       --------------------------------------------------------- */
-    .editorial-hero-section {
-      position: relative;
-      z-index: 1;
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 120px 48px 90px 48px;
-    }
-
-    .editorial-hero-content {
-      max-width: 780px;
-      margin-bottom: 64px;
-    }
-
-    .editorial-pill-badge {
+    .eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 7px 18px;
-      border-radius: var(--pill-radius);
-      background: rgba(255, 255, 255, 0.65);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      font-size: 13.5px;
-      font-weight: 600;
-      color: #2b3d2d;
-      box-shadow: 0 4px 14px rgba(35, 50, 36, 0.05);
-      margin-bottom: 24px;
-    }
-
-    .editorial-pill-badge .badge-icon {
-      color: #4a6345;
-    }
-
-    .editorial-main-title {
-      font-family: var(--font-serif);
-      font-size: clamp(44px, 5.2vw, 68px);
-      font-weight: 500;
-      line-height: 1.14;
-      letter-spacing: -0.025em;
-      color: #1e2c22;
-      margin-bottom: 22px;
-    }
-
-    .editorial-main-title em {
-      font-style: italic;
-      font-weight: 400;
-      color: #2b4530;
-    }
-
-    .editorial-subtitle {
-      font-family: var(--font-sans);
-      font-size: 16.5px;
-      line-height: 1.65;
-      color: #4a574e;
-      max-width: 540px;
-      margin-bottom: 34px;
-    }
-
-    .editorial-cta-group {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .btn-pill-olive {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background-color: #3b4e36;
-      color: #ffffff;
-      padding: 13px 30px;
-      border-radius: var(--pill-radius);
-      font-family: var(--font-sans);
-      font-size: 14.5px;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: 0 4px 18px rgba(45, 62, 41, 0.22);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: pointer;
-      border: none;
-    }
-
-    .btn-pill-olive:hover {
-      background-color: #283925;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 26px rgba(45, 62, 41, 0.32);
-      color: #ffffff;
-    }
-
-    .btn-pill-cream {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background-color: #ded7c5;
-      color: #263828;
-      padding: 13px 30px;
-      border-radius: var(--pill-radius);
-      font-family: var(--font-sans);
-      font-size: 14.5px;
-      font-weight: 600;
-      text-decoration: none;
-      border: 1px solid rgba(38, 56, 40, 0.08);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: pointer;
-    }
-
-    .btn-pill-cream:hover {
-      background-color: #d4ccb8;
-      transform: translateY(-2px);
-      color: #18261a;
-    }
-
-    /* 3 Signature Frosted Cards (Directly matching reference image layout) */
-    .reference-cards-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      width: 100%;
-    }
-
-    .ref-frosted-card {
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.88);
-      border-radius: 26px;
-      padding: 34px 34px;
-      box-shadow: 0 10px 30px rgba(40, 52, 41, 0.05);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, background 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .ref-frosted-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 42px rgba(40, 52, 41, 0.1);
-      background: rgba(255, 255, 255, 0.9);
-    }
-
-    .ref-card-metric {
-      font-family: var(--font-serif);
-      font-size: clamp(42px, 4.2vw, 54px);
-      font-weight: 400;
-      color: #1e2c22;
-      line-height: 1.05;
-      margin-bottom: 14px;
-      letter-spacing: -0.02em;
-    }
-
-    .ref-card-title {
-      font-family: var(--font-sans);
-      font-size: 18px;
-      font-weight: 700;
-      color: #1e2c22;
-      margin-bottom: 10px;
-      letter-spacing: -0.01em;
-    }
-
-    .ref-card-desc {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #526256;
-    }
-
-    /* ---------------------------------------------------------
-       2. BENTO CAPABILITIES SECTION
-       --------------------------------------------------------- */
-    .section-bento {
-      position: relative;
-      z-index: 1;
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 60px 48px 100px 48px;
-    }
-
-    .section-header-center {
-      text-align: center;
-      max-width: 680px;
-      margin: 0 auto 56px auto;
-    }
-
-    .section-tag {
-      display: inline-block;
+      gap: 10px;
+      font-family: var(--font-mono);
       font-size: 12.5px;
-      font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: #4a6345;
-      margin-bottom: 14px;
-    }
-
-    .section-heading-serif {
-      font-family: var(--font-serif);
-      font-size: clamp(34px, 3.8vw, 48px);
-      font-weight: 500;
-      line-height: 1.18;
-      letter-spacing: -0.02em;
-      color: #1e2c22;
-      margin-bottom: 16px;
-    }
-
-    .section-subtext-center {
-      font-size: 16px;
-      line-height: 1.65;
-      color: #526256;
-    }
-
-    .bento-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-    }
-
-    .bento-card {
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.88);
-      border-radius: 26px;
-      padding: 36px 34px;
-      box-shadow: 0 10px 30px rgba(40, 52, 41, 0.05);
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .bento-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 44px rgba(40, 52, 41, 0.09);
-      background: rgba(255, 255, 255, 0.9);
-    }
-
-    .bento-card-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      background: rgba(59, 78, 54, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #3b4e36;
+      color: var(--lamp);
       margin-bottom: 22px;
     }
 
-    .bento-card-title {
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--leaf);
+      box-shadow: 0 0 0 0 rgba(143, 209, 79, 0.6);
+      animation: livePulse 2s infinite;
+    }
+
+    @keyframes livePulse {
+      0% { box-shadow: 0 0 0 0 rgba(143, 209, 79, 0.55); }
+      70% { box-shadow: 0 0 0 10px rgba(143, 209, 79, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(143, 209, 79, 0); }
+    }
+
+    .section-head {
+      max-width: 760px;
+      margin: 0 auto 56px auto;
+      text-align: center;
+    }
+
+    .section-title {
       font-family: var(--font-serif);
-      font-size: 24px;
+      font-size: clamp(38.1px, 4.9vw, 62.7px);
       font-weight: 500;
-      color: #1e2c22;
-      margin-bottom: 12px;
-      letter-spacing: -0.015em;
+      line-height: 1.14;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 18px;
     }
 
-    .bento-card-desc {
-      font-size: 14.5px;
-      line-height: 1.6;
-      color: #526256;
-      margin-bottom: 24px;
+    /* section titles stay plain; the gold italic is saved for the cover and the dawn */
+    .section-title em {
+      font-style: normal;
+      color: inherit;
     }
 
-    .bento-pill-tag {
-      display: inline-block;
-      align-self: flex-start;
-      padding: 6px 14px;
-      border-radius: var(--pill-radius);
-      background: rgba(59, 78, 54, 0.08);
-      font-size: 12.5px;
-      font-weight: 600;
-      color: #354a32;
+    .dawn-title em {
+      font-style: italic;
+      color: var(--lamp);
     }
 
-    /* ---------------------------------------------------------
-       3. THREE-STEP JOURNEY SECTION
-       --------------------------------------------------------- */
-    .section-journey {
-      position: relative;
-      z-index: 1;
-      max-width: 1320px;
+    .section-lead {
+      font-size: 16.5px;
+      line-height: 1.75;
+      color: var(--ink-dim);
+      max-width: 600px;
       margin: 0 auto;
-      padding: 60px 48px 100px 48px;
     }
 
-    .journey-steps-grid {
+    /* ---------- 1. Manifesto ---------- */
+    .manifesto {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 150px 48px 140px 48px;
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 72px;
+      align-items: center;
     }
 
-    .journey-step-card {
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.88);
-      border-radius: 26px;
-      padding: 36px 34px;
-      box-shadow: 0 10px 30px rgba(40, 52, 41, 0.05);
-      position: relative;
-      transition: all 0.3s ease;
+    /* A still from the cover: the same night, the same lamp */
+    .manifesto-figure {
+      margin: 0;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8), 0 0 90px -40px rgba(245, 199, 126, 0.35);
     }
 
-    .journey-step-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 18px 40px rgba(40, 52, 41, 0.09);
-      background: rgba(255, 255, 255, 0.9);
+    .manifesto-figure img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
     }
 
-    .journey-step-number {
+    .manifesto-meta { grid-column: 1 / -1; }
+
+    .manifesto-text {
       font-family: var(--font-serif);
-      font-size: 38px;
+      font-size: clamp(29.1px, 3vw, 44.8px);
       font-weight: 400;
-      color: #3b4e36;
-      opacity: 0.85;
-      margin-bottom: 16px;
-      line-height: 1;
+      line-height: 1.55;
+      letter-spacing: 0.005em;
+      margin-bottom: 72px;
     }
 
-    .journey-step-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #1e2c22;
-      margin-bottom: 12px;
+    .manifesto-text .ch {
+      color: rgba(232, 236, 244, 0.16);
+      transition: color 0.35s ease, text-shadow 0.35s ease;
     }
 
-    .journey-step-desc {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #526256;
+    .manifesto-text .ch.lit {
+      color: var(--ink);
+      text-shadow: 0 0 24px rgba(245, 199, 126, 0.18);
     }
 
-    /* ---------------------------------------------------------
-       4. SELECTED WORKS (PORTFOLIO SHOWCASE)
-       --------------------------------------------------------- */
-    .section-works {
-      position: relative;
-      z-index: 1;
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 60px 48px 100px 48px;
-    }
-
-    .works-grid {
+    .manifesto-meta {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      border-top: 1px solid var(--line);
     }
 
-    .work-item-card {
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.88);
-      border-radius: 26px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(40, 52, 41, 0.05);
-      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    .meta-item {
+      padding: 26px 24px 0 0;
       display: flex;
       flex-direction: column;
+      gap: 10px;
     }
 
-    .work-item-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 44px rgba(40, 52, 41, 0.1);
-      background: rgba(255, 255, 255, 0.92);
-    }
-
-    .work-card-media {
-      width: 100%;
-      height: 200px;
-      border-radius: 18px;
-      overflow: hidden;
-      margin-bottom: 20px;
-      position: relative;
-    }
-
-    .work-card-media-bg1 {
-      background: linear-gradient(135deg, #2b4532 0%, #172a1e 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(255,255,255,0.9);
-      font-family: var(--font-serif);
-      font-size: 24px;
-    }
-
-    .work-card-media-bg2 {
-      background: linear-gradient(135deg, #d8cfbe 0%, #b8ad98 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #243525;
-      font-family: var(--font-serif);
-      font-size: 24px;
-    }
-
-    .work-card-media-bg3 {
-      background: linear-gradient(135deg, #3d5644 0%, #768f76 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      font-family: var(--font-serif);
-      font-size: 24px;
-    }
-
-    .work-tags-row {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .work-tag {
+    .meta-k {
+      font-family: var(--font-mono);
       font-size: 12px;
-      font-weight: 600;
-      color: #4a6345;
-      background: rgba(74, 99, 69, 0.08);
-      padding: 4px 10px;
-      border-radius: 9999px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
     }
 
-    .work-title {
-      font-family: var(--font-serif);
-      font-size: 22px;
-      font-weight: 500;
-      color: #1e2c22;
-      margin-bottom: 8px;
+    .meta-v {
+      font-size: 15.5px;
+      line-height: 1.6;
+      color: var(--ink);
     }
 
-    .work-desc {
-      font-size: 13.5px;
-      line-height: 1.55;
-      color: #526256;
-      margin-bottom: 16px;
-    }
-
-    /* ---------------------------------------------------------
-       5. CLIENT TESTIMONIALS SECTION
-       --------------------------------------------------------- */
-    .section-testimonials {
-      position: relative;
-      z-index: 1;
-      max-width: 1320px;
+    /* ---------- 2. Inside the studio: text and stills from the cover, alternating ---------- */
+    .studio {
+      max-width: 1240px;
       margin: 0 auto;
-      padding: 60px 48px 100px 48px;
+      padding: 80px 48px 140px 48px;
     }
 
-    .testimonials-grid {
+    .studio .section-head { margin-bottom: 110px; }
+
+    .studio-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 150px;
+    }
+
+    .studio-row {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 28px;
+      grid-template-columns: 1fr 1fr;
+      gap: 96px;
+      align-items: center;
     }
 
-    .testimonial-card {
-      background: rgba(255, 255, 255, 0.72);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.88);
-      border-radius: 26px;
-      padding: 40px 38px;
-      box-shadow: 0 10px 30px rgba(40, 52, 41, 0.05);
+    .studio-row.reverse .row-media { order: 2; }
+
+    .row-media {
+      margin: 0;
+      width: 100%;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.8), 0 0 100px -50px rgba(245, 199, 126, 0.3);
+    }
+
+    .row-media img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .row-media.portrait {
+      max-width: 480px;
+      justify-self: center;
+    }
+
+    .row-media.portrait img { aspect-ratio: 3 / 4; }
+
+    .row-text .eyebrow { margin-bottom: 18px; }
+
+    .row-text h3 {
+      font-family: var(--font-serif);
+      font-size: clamp(33.6px, 3.4vw, 49.3px);
+      font-weight: 500;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      margin-bottom: 20px;
+    }
+
+    .row-text h3 em {
+      font-style: normal;
+      color: inherit;
+    }
+
+    .row-text p {
+      font-size: 16px;
+      line-height: 1.85;
+      color: var(--ink-dim);
+      max-width: 460px;
+    }
+
+    /* one sentence; the number in it counts up once, when it comes into view */
+    .studio-stats {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 30px 0;
+      text-align: center;
+    }
+
+    .stat-line {
+      font-family: var(--font-serif);
+      font-size: clamp(33.6px, 4vw, 60.5px);
+      font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+    }
+
+    .stat-num {
+      display: inline-block;
+      min-width: 1.75em;
+      font-style: italic;
+      color: var(--lamp);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .row-list {
+      list-style: none;
+      margin-top: 30px;
+      max-width: 460px;
+      border-top: 1px solid var(--line);
+    }
+
+    .row-list li {
+      display: flex;
+      gap: 18px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+      font-size: 15px;
+      color: var(--ink);
+    }
+
+    .row-list span {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--lamp);
+      padding-top: 2px;
+    }
+
+    /* ---------- 3. Desks ---------- */
+    .desks {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 100px 48px 120px 48px;
+    }
+
+    /* three steps, joined by small arrows so the order reads left to right */
+    .desk-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: stretch;
+      gap: 18px;
+    }
+
+    .step-arrow {
+      align-self: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      color: var(--lamp);
+    }
+
+    .step-no {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      font-family: var(--font-serif);
+      font-size: 80.6px;
+      font-weight: 400;
+      line-height: 1;
+      color: rgba(245, 199, 126, 0.16);
+      transition: color 0.6s ease;
+    }
+
+    .desk:hover .step-no,
+    .desk.lit .step-no { color: rgba(245, 199, 126, 0.38); }
+
+    .desk {
+      position: relative;
+      padding: 54px 34px 36px 34px;
+      border-radius: 22px;
+      background: var(--glass);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow: hidden;
+      transition: border-color 0.5s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Lamp cone from the top edge; brightens on hover */
+    .desk-lamp {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      width: 380px;
+      height: 340px;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse at 50% 0%, rgba(245, 199, 126, 0.3) 0%, rgba(245, 199, 126, 0.08) 40%, transparent 70%);
+      opacity: 0.25;
+      transition: opacity 0.6s ease;
+      pointer-events: none;
+    }
+
+    .desk-lamp::after {
+      content: '';
+      position: absolute;
+      top: 118px;
+      left: 50%;
+      width: 46px;
+      height: 3px;
+      transform: translateX(-50%);
+      border-radius: 2px;
+      background: var(--lamp);
+      box-shadow: 0 0 18px 4px rgba(245, 199, 126, 0.5);
+      opacity: 0.5;
+      transition: opacity 0.6s ease;
+    }
+
+    .desk:hover {
+      border-color: rgba(245, 199, 126, 0.25);
+      transform: translateY(-4px);
+    }
+
+    .desk:hover .desk-lamp,
+    .desk.lit .desk-lamp,
+    .desk:hover .desk-lamp::after,
+    .desk.lit .desk-lamp::after { opacity: 1; }
+
+    .desk > *:not(.desk-lamp):not(.step-no) { position: relative; }
+
+    .desk-no {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--lamp);
+      text-transform: uppercase;
+    }
+
+    .desk-title {
+      font-family: var(--font-serif);
+      font-size: 29.1px;
+      font-weight: 500;
+      margin: 14px 0 12px 0;
+    }
+
+    .desk-desc {
+      font-size: 14.5px;
+      line-height: 1.75;
+      color: var(--ink-dim);
+      margin-bottom: 22px;
+    }
+
+    .desk-list {
+      list-style: none;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .desk-list li::before {
+      content: '—';
+      color: var(--ink-faint);
+      margin-right: 10px;
+    }
+
+    /* ---------- 5. Works wall (after dawn): curved perspective gallery of launched projects ---------- */
+    .works-wall {
+      height: 100svh;
+      min-height: 700px;
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+      /* the sunrise above flows down into the gallery */
+      background: linear-gradient(180deg, transparent 0%, rgba(8, 8, 10, 0.78) 22%, #060608 55%, #050505 100%);
+    }
+
+    .works-wall::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+      background: linear-gradient(90deg, #050505 0, transparent 15%, transparent 85%, #050505 100%),
+                  linear-gradient(180deg, transparent 0, transparent 78%, rgba(0, 0, 0, 0.62));
+      /* side shading fades in, so the sunrise above has no hard edge */
+      mask-image: linear-gradient(180deg, transparent 0, #000 35%);
+      -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 35%);
+    }
+
+    .wall-intro {
+      padding: 40px 24px 0 24px;
+      margin-bottom: 0;
+    }
+
+    .wall-environment {
+      position: absolute;
+      inset: -23% -17% -38%;
+      perspective: 1500px;
+      perspective-origin: 50% 41%;
+      transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
+      transition: transform 0.25s ease-out;
+    }
+
+    .wall-surface {
+      position: absolute;
+      inset: 0;
+      transform: rotateX(5.5deg) rotateY(var(--tilt, 0deg)) scale(1.08);
+      transform-style: preserve-3d;
+      transform-origin: 50% 46%;
+      mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 92%, transparent 100%);
+      -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 92%, transparent 100%);
+    }
+
+    .wall-grid-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      opacity: 0.72;
+    }
+
+    .wall-grid-lines path {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.19);
+      stroke-width: 1;
+      vector-effect: non-scaling-stroke;
+    }
+
+    .wall-grid-lines .horizon { stroke: rgba(255, 255, 255, 0.11); }
+
+    .wall-grid {
+      position: absolute;
+      /* sized so all three rows fit on one screen, below the navbar and above the controls */
+      inset: 21% 12% 29%;
+      overflow-y: auto;
+      scrollbar-width: none;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(185px, 1fr));
+      grid-template-rows: repeat(3, minmax(0, 1fr));
+      perspective: 1200px;
+    }
+
+    .wall-grid::-webkit-scrollbar { display: none; }
+
+    .project-tile {
+      appearance: none;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: inherit;
+      text-align: left;
+      font: inherit;
+      position: relative;
+      min-width: 0;
+      padding: 19px 16px 18px;
+      border-right: 1px solid rgba(255, 255, 255, 0.085);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      cursor: pointer;
+      isolation: isolate;
+      overflow: hidden;
+      transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .quote-text {
-      font-family: var(--font-serif);
-      font-size: 21px;
-      font-weight: 400;
-      line-height: 1.5;
-      color: #1e2c22;
-      margin-bottom: 28px;
-      letter-spacing: -0.01em;
+    .project-tile:nth-child(5n+1) { border-left: 1px solid rgba(255, 255, 255, 0.07); }
+
+    .project-tile::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.045), transparent 68%);
+      opacity: 0;
+      transition: opacity 0.45s;
+      z-index: -1;
     }
 
-    .quote-author {
+    .project-tile:hover::before,
+    .project-tile:focus-visible::before { opacity: 1; }
+
+    .project-tile:hover {
+      z-index: 3;
+      transform: translateZ(22px);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .project-tile.filtered-out { display: none; }
+
+    .tile-top,
+    .tile-bottom {
       display: flex;
       align-items: center;
-      gap: 14px;
+      justify-content: space-between;
+      gap: 8px;
+      color: #92928f;
+      font: 9px var(--font-mono);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
 
-    .author-avatar {
-      width: 44px;
-      height: 44px;
+    .tile-top .tags {
+      max-width: 75%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .tile-content {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+      padding: 14px 0;
+    }
+
+    .tile-name {
+      font-size: clamp(13px, 1.1vw, 19px);
+      font-weight: 600;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: #c4c4c0;
+      transition: color 0.3s;
+    }
+
+    .tile-type {
+      font: 9px var(--font-mono);
+      color: #757572;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .project-tile:hover .tile-name { color: #fff; }
+
+    .tile-image-wrap {
+      height: min(clamp(86px, 10vw, 150px), 11vh);
+      width: var(--img-width, 94%);
+      margin: auto;
+      overflow: hidden;
+      background: #131313;
+      transform: perspective(800px) rotateY(var(--image-tilt, 0deg)) rotateZ(var(--image-rotate, 0deg));
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .tile-image {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      filter: saturate(0.83) brightness(0.88);
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s;
+    }
+
+    .project-tile:hover .tile-image { transform: scale(1.055); filter: saturate(1) brightness(1); }
+    .project-tile:nth-child(3n+1) .tile-image-wrap { height: min(clamp(74px, 8vw, 118px), 9vh); --img-width: 77%; }
+    .project-tile:nth-child(4n+2) .tile-image-wrap { height: min(clamp(106px, 12vw, 168px), 12.5vh); --img-width: 100%; }
+    .project-tile:nth-child(5n+3) .tile-image-wrap { height: min(clamp(90px, 9vw, 132px), 10vh); --img-width: 69%; --image-rotate: -1.5deg; }
+
+    .tile-bottom { margin-top: 12px; }
+    .tile-bottom .open-mark { font-size: 14px; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s; }
+    .project-tile:hover .open-mark { transform: translate(2px, -2px); color: var(--leaf); }
+
+    .wall-cursor {
+      position: fixed;
+      z-index: 100;
+      left: 0;
+      top: 0;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
-      background: #3b4e36;
-      color: #fff;
+      background: var(--leaf);
+      color: #0b1a0e;
+      display: grid;
+      place-items: center;
+      font: 10px var(--font-mono);
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.7);
+      transition: opacity 0.2s, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .wall-cursor.is-visible { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+    .wall-label {
+      position: absolute;
+      left: 3vw;
+      bottom: 34px;
+      z-index: 8;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 15px;
+      gap: 13px;
+      font: 10px var(--font-mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
     }
 
-    .author-name {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1e2c22;
-    }
+    .wall-label::before { content: ''; width: 25px; height: 1px; background: var(--leaf); }
 
-    .author-role {
-      font-size: 13px;
-      color: #526256;
-    }
-
-    /* ---------------------------------------------------------
-       6. CALL TO ACTION BANNER SECTION
-       --------------------------------------------------------- */
-    .section-cta {
-      position: relative;
-      z-index: 1;
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: 60px 48px 110px 48px;
-    }
-
-    .cta-banner-card {
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.88) 0%, rgba(248, 244, 234, 0.92) 100%);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.95);
-      border-radius: 32px;
-      padding: 64px 56px;
-      text-align: center;
-      box-shadow: 0 16px 45px rgba(40, 52, 41, 0.08);
-      max-width: 960px;
-      margin: 0 auto;
-    }
-
-    .cta-heading {
-      font-family: var(--font-serif);
-      font-size: clamp(36px, 4.2vw, 52px);
-      font-weight: 500;
-      line-height: 1.15;
-      color: #1e2c22;
-      margin-bottom: 18px;
-      letter-spacing: -0.02em;
-    }
-
-    .cta-subtext {
-      font-size: 16.5px;
-      line-height: 1.6;
-      color: #4a574e;
-      max-width: 580px;
-      margin: 0 auto 36px auto;
-    }
-
-    .cta-actions-row {
+    .wall-controls {
+      position: absolute;
+      z-index: 9;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 10px;
+    }
+
+    .control-cluster {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      padding: 5px;
+      background: rgba(42, 42, 42, 0.84);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .icon-button {
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: #bbb;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s;
+    }
+
+    .icon-button[aria-pressed="true"] { background: #f4f3f0; color: #0a0a0a; }
+    .icon-button svg { width: 17px; height: 17px; }
+
+    .filter-button {
+      display: flex;
+      align-items: center;
       gap: 16px;
+      padding: 0 20px;
+      height: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 99px;
+      background: rgba(42, 42, 42, 0.84);
+      color: #eee;
+      font-size: 13px;
+      cursor: pointer;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      transition: background 0.25s, color 0.25s;
+    }
+
+    .filter-button:hover { background: #f4f3f0; color: #080808; }
+    .filter-count { font: 10px var(--font-mono); opacity: 0.7; }
+
+    .wall-count {
+      position: absolute;
+      right: 3vw;
+      bottom: 37px;
+      z-index: 8;
+      font: 10px var(--font-mono);
+      color: #8a8a86;
+    }
+
+    .wall-count strong { color: #f4f2ee; font-weight: 400; }
+
+    .filter-popover {
+      position: absolute;
+      z-index: 10;
+      left: 50%;
+      bottom: 84px;
+      width: min(290px, calc(100vw - 32px));
+      padding: 22px;
+      background: rgba(15, 15, 15, 0.96);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48);
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(-50%, 10px);
+      transition: opacity 0.25s, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s;
+    }
+
+    .filter-popover.open { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+
+    .filter-popover h3 {
+      margin: 0 0 16px;
+      font: 10px var(--font-mono);
+      letter-spacing: 0.1em;
+      color: #aaa;
+      text-transform: uppercase;
+    }
+
+    .filter-options { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+
+    .filter-option {
+      padding: 10px 9px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      color: #8b8b87;
+      font: 10px var(--font-mono);
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .filter-option:hover,
+    .filter-option[aria-pressed="true"] { color: #0b1a0e; background: var(--leaf); }
+
+    .works-wall.view-list .wall-grid { grid-template-columns: repeat(2, minmax(260px, 1fr)); grid-template-rows: auto; }
+    .works-wall.view-list .project-tile { min-height: 230px; }
+    .works-wall.view-list .project-tile .tile-image-wrap { width: 55%; height: 120px; }
+
+    /* Project detail */
+    .project-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: grid;
+      place-items: center;
+      padding: 30px;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s, visibility 0.35s;
+    }
+
+    .project-modal.open { opacity: 1; visibility: visible; }
+
+    .modal-card {
+      position: relative;
+      width: min(960px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      background: #101010;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      color: var(--ink);
+      transform: translateY(18px) scale(0.985);
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .project-modal.open .modal-card { transform: none; }
+
+    .modal-image { display: block; width: 100%; height: min(50vh, 450px); object-fit: cover; filter: brightness(0.88); }
+    .modal-body { display: grid; grid-template-columns: 1fr auto; gap: 20px; padding: 30px; }
+    .modal-body h2 { margin: 0 0 8px; font-family: var(--font-serif); font-size: clamp(35.8px, 5.6vw, 62.7px); font-weight: 400; letter-spacing: -0.03em; }
+    .modal-body p { max-width: 600px; margin: 0; color: #aaa; font-size: 15px; line-height: 1.7; }
+    .modal-meta { font: 10px var(--font-mono); color: #888; text-transform: uppercase; }
+
+    .modal-close {
+      position: absolute;
+      z-index: 2;
+      right: 14px;
+      top: 14px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.55);
+      color: #fff;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .modal-close:hover { background: #fff; color: #111; }
+
+    /* ---------- 6. Voices: editorial layout, client list on the left, quote on the right ---------- */
+    .voices {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 100px 48px 80px 48px;
+    }
+
+    .voice-slider {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 80px;
+      padding: 64px 0;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      touch-action: pan-y;
+      outline: none;
+    }
+
+    .voice-slider:focus-visible { border-color: rgba(245, 199, 126, 0.4); }
+
+    .voice-count {
+      font-family: var(--font-serif);
+      font-size: 71.7px;
+      font-weight: 400;
+      line-height: 1;
+      color: var(--ink);
+      margin-bottom: 40px;
+    }
+
+    .voice-count small {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--ink-faint);
+      margin-left: 8px;
+      letter-spacing: 0.06em;
+    }
+
+    /* client list doubles as navigation; the line under the active name is the autoplay progress */
+    .voice-tabs {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .voice-tab {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 16px 0;
+      background: none;
+      border: 0;
+      text-align: left;
+      color: var(--ink-faint);
+      cursor: pointer;
+      transition: color 0.4s ease;
+    }
+
+    .voice-tab b { font-size: 15px; font-weight: 600; }
+    .voice-tab span { font-size: 12.5px; }
+    .voice-tab:hover, .voice-tab.active { color: var(--ink); }
+    .voice-tab.active span { color: var(--ink-dim); }
+
+    .voice-tab::after,
+    .voice-tab i {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 1px;
+    }
+
+    .voice-tab::after { right: 0; background: var(--line); }
+
+    .voice-tab i {
+      width: 0;
+      z-index: 1;
+      background: var(--lamp);
+    }
+
+    .voice-tab.active i { animation: voiceProgress var(--voice-ms, 7000ms) linear forwards; }
+    .voice-slider.paused .voice-tab.active i { animation-play-state: paused; }
+
+    @keyframes voiceProgress { to { width: 100%; } }
+
+    .voice-stage {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-width: 0;
+    }
+
+    .voice-track { display: grid; }
+
+    .voice {
+      grid-area: 1 / 1;
+      margin: 0;
+      opacity: 0;
+      translate: 0 14px;
+      visibility: hidden;
+      transition: opacity 0.8s ease, translate 0.8s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.8s;
+    }
+
+    .voice.active { opacity: 1; translate: 0 0; visibility: visible; }
+    .voice.leaving { translate: 0 -14px; }
+
+    .voice-mark {
+      display: block;
+      font-family: var(--font-serif);
+      font-size: 60.5px;
+      line-height: 0.6;
+      height: 30px;
+      color: var(--lamp);
+    }
+
+    .voice blockquote {
+      font-family: var(--font-serif);
+      font-size: clamp(24.6px, 2.5vw, 34.7px);
+      font-weight: 400;
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+      color: var(--ink);
+      max-width: 780px;
+      margin-bottom: 32px;
+    }
+
+    .voice figcaption {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    .voice figcaption b { color: var(--lamp); font-weight: 600; }
+
+    .voice-nav {
+      display: flex;
+      gap: 10px;
+      margin-top: 44px;
+    }
+
+    .voice-arrow {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink-dim);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: color 0.25s ease, border-color 0.25s ease;
+    }
+
+    .voice-arrow:hover { color: #fff; border-color: rgba(255, 255, 255, 0.3); }
+
+    /* ---------- 6b. FAQ: questions open into answers ---------- */
+    .faq {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 80px 48px 120px 48px;
+    }
+
+    .faq-list { border-top: 1px solid var(--line); }
+
+    .faq-item { border-bottom: 1px solid var(--line); }
+
+    .faq-q {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding: 26px 4px;
+      background: none;
+      border: 0;
+      color: var(--ink);
+      text-align: left;
+      font-family: var(--font-serif);
+      font-size: clamp(20.2px, 2vw, 24.6px);
+      cursor: pointer;
+    }
+
+    .faq-q .faq-no {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--ink-faint);
+      transition: color 0.3s ease;
+    }
+
+    .faq-q .faq-text { flex: 1; }
+
+    .faq-icon {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      border: 1px solid var(--line);
+      transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .faq-icon::before,
+    .faq-icon::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 11px;
+      height: 1.5px;
+      background: currentColor;
+      transform: translate(-50%, -50%);
+    }
+
+    .faq-icon::after { transform: translate(-50%, -50%) rotate(90deg); }
+
+    .faq-q:hover .faq-icon { border-color: rgba(255, 255, 255, 0.25); }
+    .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--lamp); border-color: var(--lamp); color: #0b1324; }
+    .faq-item.open .faq-no { color: var(--lamp); }
+
+    /* smooth open/close via grid rows */
+    .faq-a {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .faq-item.open .faq-a { grid-template-rows: 1fr; }
+
+    .faq-a > div { overflow: hidden; }
+
+    .faq-a p b { color: var(--lamp); font-weight: 600; }
+
+    .faq-a p {
+      padding: 0 56px 28px 56px;
+      font-size: 15.5px;
+      line-height: 1.85;
+      color: var(--ink-dim);
+    }
+
+    /* ---------- 7. Dawn ---------- */
+    .dawn {
+      text-align: center;
+      padding: 160px 24px 170px 24px;
+    }
+
+    .dawn-sun {
+      position: absolute;
+      left: 50%;
+      bottom: -360px;
+      width: 760px;
+      height: 760px;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 214, 160, 0.55) 0%, rgba(246, 167, 122, 0.25) 35%, transparent 68%);
+      filter: blur(10px);
+      pointer-events: none;
+      z-index: -1;
+      /* --rise goes 0 -> 1 as the dawn section scrolls in: the sun climbs, grows and brightens */
+      transform: translate(-50%, calc((0.55 - var(--rise, 0)) * 320px)) scale(calc(0.78 + var(--rise, 0) * 0.22));
+      opacity: calc(0.3 + var(--rise, 0) * 0.7);
+      will-change: transform, opacity;
+    }
+
+    /* bright core of the sun, breathing slowly */
+    .dawn-sun::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 220px;
+      height: 220px;
+      margin: -110px 0 0 -110px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 246, 228, 0.95) 0%, rgba(255, 222, 170, 0.6) 30%, rgba(255, 196, 140, 0.15) 60%, transparent 72%);
+      animation: sunBreath 6s ease-in-out infinite;
+    }
+
+    @keyframes sunBreath {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.08); opacity: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .dawn-sun { --rise: 1; }
+      .dawn-sun::before { animation: none; }
+    }
+
+    .dawn-title {
+      font-family: var(--font-serif);
+      font-size: clamp(42.6px, 6vw, 80.6px);
+      font-weight: 500;
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      margin-bottom: 22px;
+    }
+
+    .dawn .section-lead { margin-bottom: 40px; }
+
+    .dawn-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
       flex-wrap: wrap;
     }
 
-    /* ---------------------------------------------------------
-       7. MODERN SITE FOOTER
-       --------------------------------------------------------- */
+    /* ---------- 8. Footer ---------- */
     .site-footer {
       position: relative;
       z-index: 1;
-      max-width: 1320px;
+      max-width: 1240px;
       margin: 0 auto;
       padding: 60px 48px 40px 48px;
-      border-top: 1px solid rgba(38, 56, 40, 0.08);
+      border-top: 1px solid var(--line);
       display: flex;
       flex-direction: column;
       gap: 40px;
@@ -1179,34 +1658,27 @@
       gap: 36px;
     }
 
-    .footer-brand-col {
-      max-width: 340px;
-    }
-
-    .footer-logo {
-      height: 34px;
-      width: auto;
-      margin-bottom: 16px;
-    }
+    .footer-brand-col { max-width: 360px; }
+    .footer-logo { height: 30px; width: auto; margin-bottom: 16px; }
 
     .footer-desc {
       font-size: 14px;
-      line-height: 1.6;
-      color: #526256;
+      line-height: 1.7;
+      color: var(--ink-dim);
     }
 
     .footer-nav-cols {
       display: flex;
-      gap: 60px;
+      gap: 64px;
       flex-wrap: wrap;
     }
 
     .footer-col-title {
-      font-size: 13.5px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: #1e2c22;
+      color: var(--ink-faint);
       margin-bottom: 16px;
     }
 
@@ -1218,26 +1690,90 @@
     }
 
     .footer-links-list a {
-      color: #526256;
+      color: var(--ink-dim);
       text-decoration: none;
       font-size: 14px;
       transition: color 0.2s ease;
     }
 
-    .footer-links-list a:hover {
-      color: #1e2c22;
-    }
+    .footer-links-list a:hover { color: #fff; }
 
     .footer-bottom-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-top: 24px;
-      border-top: 1px solid rgba(38, 56, 40, 0.06);
+      border-top: 1px solid var(--line);
       font-size: 13px;
-      color: #647568;
+      color: var(--ink-faint);
       flex-wrap: wrap;
       gap: 16px;
+    }
+
+    .footer-top-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--line);
+      color: var(--ink-dim);
+      padding: 7px 16px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      cursor: pointer;
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+
+    .footer-top-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.12); }
+
+    /* ---------- After dawn: the sunrise settles into a warm deep brown for FAQ, works and footer ---------- */
+    .after-dawn {
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(180deg, transparent 0, rgba(46, 33, 28, 0.6) 220px, rgba(38, 29, 25, 0.94) 520px, #241b18 760px, #1e1714 100%);
+    }
+
+    .after-dawn .works-wall { background: transparent; }
+    .after-dawn .works-wall::before {
+      background: linear-gradient(90deg, #211915 0, transparent 15%, transparent 85%, #211915 100%),
+                  linear-gradient(180deg, transparent 0, transparent 78%, rgba(20, 14, 12, 0.55));
+    }
+    .after-dawn .tile-image-wrap { background: #2c221e; }
+    .after-dawn .control-cluster,
+    .after-dawn .filter-button { background: rgba(58, 44, 38, 0.88); border-color: rgba(255, 236, 220, 0.1); }
+    .after-dawn .filter-button:hover { background: #f4ebe2; color: #241b18; }
+    .after-dawn .filter-popover { background: rgba(36, 27, 24, 0.97); border-color: rgba(255, 236, 220, 0.12); }
+
+    /* ---------- Reveal on scroll ---------- */
+    .reveal {
+      opacity: 0;
+      translate: 0 30px;
+      transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), translate 1s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease;
+      transition-delay: var(--delay, 0s), var(--delay, 0s), 0s, 0s;
+    }
+
+    .reveal.in {
+      opacity: 1;
+      translate: 0 0;
+    }
+
+    /* ---------- Mobile menu ---------- */
+    .nav-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      color: #fff;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; translate: none; transition: none; }
+      .manifesto-text .ch { color: var(--ink); }
     }
 
     /* =========================================================
@@ -1246,40 +1782,91 @@
     @media (max-width: 1024px) {
       .navbar { padding: 18px 32px; }
       .navbar.scrolled-page { padding: 14px 32px; }
-      .hero-intro { padding: 0 40px 80px 40px; }
-      .brand-reveal-card { padding: 36px 44px 34px 44px; max-width: 580px; }
-      .brand-reveal-logo { height: 60px; }
-      .editorial-hero-section { padding: 90px 32px 70px 32px; }
-      .reference-cards-row { grid-template-columns: repeat(3, 1fr); gap: 16px; }
-      .bento-grid { grid-template-columns: 1fr; }
-      .journey-steps-grid { grid-template-columns: 1fr; }
-      .works-grid { grid-template-columns: 1fr; }
-      .testimonials-grid { grid-template-columns: 1fr; }
-      .section-bento, .section-journey, .section-works, .section-testimonials, .section-cta, .site-footer { padding: 50px 32px; }
+      .hero-intro { padding: 0 48px 80px 48px; }
+
+      .studio, .desks, .voices, .faq { padding-left: 32px; padding-right: 32px; }
+      .wall-environment { inset: -17% -45% -26%; perspective: 1700px; }
+      .wall-surface { transform: rotateX(4deg) rotateY(var(--tilt, 0deg)) scale(1.06); }
+      .wall-grid { inset: 13% 20% 17%; grid-template-columns: repeat(3, minmax(175px, 1fr)); grid-template-rows: repeat(3, minmax(220px, 1fr)); }
+      .desk-grid { grid-template-columns: 1fr; max-width: 640px; margin: 0 auto; }
+      .step-arrow { justify-self: center; transform: rotate(90deg); }
+      .studio-row { gap: 56px; }
     }
 
     @media (max-width: 768px) {
       .nav-links { display: none; }
+      .nav-toggle { display: inline-flex; }
+      .nav-actions .btn-pill { display: none; }
       .navbar { padding: 14px 20px; }
       .navbar.scrolled-page { padding: 12px 20px; }
+      .navbar.nav-open .nav-links {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 4px;
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 16px;
+        right: 16px;
+        padding: 12px;
+        border-radius: 20px;
+        background: rgba(10, 16, 32, 0.96);
+        border-color: var(--line);
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+      }
+      .navbar.nav-open .nav-links a {
+        display: block;
+        padding: 12px 14px;
+        border-radius: 12px;
+        color: var(--ink);
+        font-size: 16px;
+      }
+
       .hero-intro { padding: 0 24px 60px 24px; }
       .hero-outro { padding: 20px 16px; }
-      .brand-reveal-card { padding: 30px 22px 26px 22px; border-radius: 24px; }
-      .brand-reveal-logo { height: 48px; }
-      .brand-reveal-slogan { font-size: 26px; }
-      .hud-controls { padding: 12px 20px; }
-      .scroll-cue { display: none; }
-      
-      .editorial-hero-section { padding: 70px 20px 50px 20px; }
-      .editorial-main-title { font-size: 38px; }
-      .reference-cards-row { grid-template-columns: 1fr; gap: 14px; }
-      .ref-frosted-card { padding: 26px 24px; }
-      .ref-card-metric { font-size: 36px; }
-      .section-bento, .section-journey, .section-works, .section-testimonials, .section-cta { padding: 40px 20px 60px 20px; }
-      .cta-banner-card { padding: 40px 24px; }
+      .brand-reveal-logo { height: 40px; }
+      .brand-reveal-rule { height: 40px; margin: 24px 0 22px 0; }
+      .brand-reveal-eyebrow { font-size: 10px; letter-spacing: 0.16em; margin-bottom: 26px; }
+      .brand-reveal-subtext { font-size: 14px; letter-spacing: 0.02em; }
+
+      .manifesto { padding: 110px 22px 90px 22px; grid-template-columns: 1fr; gap: 40px; }
+      .manifesto-figure { max-width: 420px; }
+      .manifesto-meta { grid-template-columns: 1fr; }
+      .meta-item { padding: 20px 0 0 0; }
+      .studio, .desks, .voices, .faq { padding: 70px 18px 80px 18px; }
+      .voice-slider { grid-template-columns: 1fr; gap: 28px; padding: 44px 0; }
+      .voice-count { font-size: 44px; margin-bottom: 0; }
+      .voice-tabs { display: none; }
+      .faq-q { gap: 14px; padding: 22px 0; }
+      .faq-a p { padding: 0 0 24px 0; }
+      .works-wall { min-height: 640px; }
+      .wall-environment { inset: 0; perspective: none; transform: none; transition: none; }
+      .wall-surface { inset: 0; transform: none; }
+      .wall-grid-lines { display: none; }
+      .wall-grid { inset: 12% 4% 14%; display: flex; flex-direction: column; overscroll-behavior: contain; }
+      .project-tile { flex-shrink: 0; min-height: 190px; padding: 14px 14px 13px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto; border-left: 1px solid rgba(255, 255, 255, 0.07); }
+      .project-tile:hover { transform: none; }
+      .tile-top { grid-column: 1 / -1; align-self: start; }
+      .tile-content { grid-column: 1; grid-row: 2; align-self: end; padding: 0 0 3px; }
+      .project-tile .tile-image-wrap,
+      .works-wall.view-list .project-tile .tile-image-wrap { grid-column: 2; grid-row: 2; width: 100%; height: 96px; align-self: end; margin: 0; }
+      .tile-bottom { display: none; }
+      .wall-label, .wall-count { display: none; }
+      .wall-controls { bottom: 16px; }
+      .filter-popover { bottom: 76px; }
+      .modal-body { grid-template-columns: 1fr; padding: 22px; }
+      .modal-meta { order: -1; }
+      .modal-image { height: 38vh; }
+      .section-head { margin-bottom: 40px; }
+      .studio .section-head { margin-bottom: 60px; }
+      .studio-rows { gap: 80px; }
+      .studio-row { grid-template-columns: 1fr; gap: 28px; }
+      .studio-row.reverse .row-media { order: 0; }
+      .row-media.portrait { max-width: none; }
+      .dawn { padding: 110px 20px 130px 20px; }
       .site-footer { padding: 40px 20px 30px 20px; }
       .footer-top-row { flex-direction: column; gap: 28px; }
-      .footer-nav-cols { gap: 32px; }
+      .footer-nav-cols { gap: 40px; }
     }
   </style>
 </head>
@@ -1288,19 +1875,25 @@
   <!-- Top Navigation Bar (Fixed with Adaptive Frosted Glass) -->
   <header class="navbar" id="navbar">
     <a href="#" class="nav-brand" id="navBrand" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">
-      <img src="assets/logo_cropped.png" alt="WebBloom" class="nav-brand-logo">
+      <img src="assets/logo_white.png" alt="WebBloom" class="nav-brand-logo">
     </a>
 
     <ul class="nav-links">
-      <li><a href="#overview">Overview</a></li>
-      <li><a href="#capabilities">Capabilities</a></li>
-      <li><a href="#workflow">Workflow</a></li>
-      <li><a href="#work">Work</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#overview">About</a></li>
+      <li><a href="#studio">Studio</a></li>
+      <li><a href="#capabilities">Process</a></li>
+      <li><a href="#work">Works</a></li>
     </ul>
 
     <div class="nav-actions">
-      <a href="#contact" class="btn-pill btn-pill-accent" onclick="scrollToContent(); return false;">Start a project</a>
+      <a href="#contact" class="btn-pill btn-pill-accent">Start a project</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+      </button>
     </div>
   </header>
 
@@ -1320,10 +1913,7 @@
 
         <!-- STAGE 1: INTRO COVER (0% - 25% Scroll) -->
         <section class="hero-intro" id="heroIntro">
-          <div class="pill-badge">
-            <span class="pill-badge-icon">✦</span>
-            <span>Digital Craft & Experience Design</span>
-          </div>
+          <div class="hero-eyebrow">Digital Craft &amp; Experience Design</div>
 
           <h1 class="hero-title">
             From creative sparks<br>
@@ -1331,417 +1921,341 @@
           </h1>
 
           <p class="hero-desc">
-            在星空与繁花交织的夜色中，每一行代码都在孕育独特的数字生命。我们为胸怀远见的品牌塑造兼具艺术美感与工程力量的网页封面与数字旗舰。
+            Under the stars, a studio builds websites with care — cinematic, considered, and fast on every screen.
           </p>
 
           <div class="hero-cta-group">
             <button class="btn-pill btn-pill-accent" onclick="scrollToContent()">
-              Explore Creations 
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              Explore Creations
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
                 <polyline points="12 5 19 12 12 19"></polyline>
               </svg>
             </button>
-            <button class="btn-pill btn-pill-glass" onclick="scrollToContent()">
-              Our Philosophy
-            </button>
+            <button class="hero-link" onclick="scrollToContent()">Our Philosophy</button>
           </div>
         </section>
 
         <!-- STAGE 2: BRAND LOGO REVEAL (70% - 100% Scroll) -->
         <section class="hero-outro" id="heroOutro">
-          <div class="brand-reveal-backdrop"></div>
+          <div class="brand-reveal-backdrop"><canvas id="outroStars" aria-hidden="true"></canvas></div>
           <div class="brand-reveal-card" id="brandCard">
+            <div class="brand-reveal-eyebrow">Digital Craft &amp; Experience Design</div>
             <div class="brand-logo-container">
-              <img src="assets/logo_cropped.png" alt="WebBloom Logo" class="brand-reveal-logo">
+              <img src="assets/logo_white.png" alt="WebBloom Logo" class="brand-reveal-logo">
             </div>
-            <h2 class="brand-reveal-slogan">Ideas Bloom on the Web</h2>
+            <div class="brand-reveal-rule" aria-hidden="true"></div>
+            <h2 class="brand-reveal-slogan">Ideas <em>Bloom</em> on the Web</h2>
             <p class="brand-reveal-subtext">
-              从初次构想到全网绽放 · 赋予品牌经久不息的数字生命力
+              From first idea to live launch.
             </p>
-            <div class="brand-reveal-actions">
-              <button class="btn-pill btn-pill-accent" onclick="scrollToContent()">
-                探索完整官网 · Explore Website
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="12" y1="5" x2="12" y2="19"></line>
-                  <polyline points="19 12 12 19 5 12"></polyline>
-                </svg>
-              </button>
-            </div>
           </div>
         </section>
 
       </main>
 
-      <!-- Bottom HUD: Interactive Controls & Scroll Hint -->
-      <footer class="hud-controls">
-        
-        <!-- Animated Mouse Indicator (Click to jump to content) -->
-        <div class="scroll-cue" id="scrollCue" onclick="scrollToContent()" style="cursor: pointer;" title="点击直达正文内容">
-          <div class="mouse-icon">
-            <div class="mouse-wheel"></div>
-          </div>
-          <span id="scrollCueText">向下滚动推进视频 · Scroll down</span>
-        </div>
-
-        <!-- Interactive Timeline & Scrubber -->
-        <div class="timeline-hud">
-          <span class="hud-label">Cover Scrub</span>
-          <div class="scrub-track" id="scrubTrack" title="点击或拖动跳转进度">
-            <div class="scrub-fill" id="scrubFill"></div>
-          </div>
-          <span class="hud-percent" id="hudPercent">0%</span>
-          <button class="jump-btn" id="btnRestart" onclick="scrollToMilestone(0)">↺ 顶部</button>
-          <button class="jump-btn" id="btnExplore" onclick="scrollToContent()">浏览正文 ↓</button>
-        </div>
-
-      </footer>
-
     </div>
   </div>
 
   <!-- =========================================================
-       PAGE CONTENT (LOWER SECTION - EDITORIAL AESTHETIC)
+       PAGE CONTENT — NIGHT STUDIO (continues the cover's starry night, ends at dawn)
        ========================================================= -->
   <div class="page-content" id="pageContent">
+    <canvas id="nightSky" aria-hidden="true"></canvas>
 
-    <!-- Ambient Warm Sunset Glows (Organic, non-Islamic) -->
-    <div class="ambient-glow-1"></div>
-    <div class="ambient-glow-2"></div>
-
-    <!-- ---------------------------------------------------------
-         1. SIGNATURE EDITORIAL HERO SHOWCASE (MATCHING REFERENCE IMAGE)
-         --------------------------------------------------------- -->
-    <section class="editorial-hero-section" id="overview">
-      <div class="editorial-hero-content">
-        <div class="editorial-pill-badge">
-          <span class="editorial-badge-icon">✦</span>
-          <span>How It Works · 创作哲学</span>
-        </div>
-
-        <h2 class="editorial-main-title">
-          From first spark<br>
-          to <em>blooming</em> presence
-        </h2>
-
-        <p class="editorial-subtitle">
-          A simple, thoughtful workflow helps ambitious brands craft fluid web experiences, capture global attention, and keep moving forward.
-        </p>
-
-        <div class="editorial-cta-group">
-          <a href="#contact" class="btn-pill-olive">
-            Start a project
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
-          <a href="#capabilities" class="btn-pill-cream">
-            See the method
-          </a>
-        </div>
+    <!-- 1. MANIFESTO: text lights up word by word as you read -->
+    <section class="manifesto" id="overview">
+      <div class="manifesto-copy">
+      <div class="eyebrow"><span class="live-dot"></span><span id="studioClock">02:14</span> AM · Lamps still on</div>
+      <p class="manifesto-text" id="manifestoText">When the city sleeps, a few lamps stay on. We are a small studio that treats every website as a piece of craft — every margin, every frame, every line of code, considered.</p>
       </div>
-
-      <!-- 3 Signature Frosted Cards (Directly matching media_1791445297111.png layout) -->
-      <div class="reference-cards-row">
-        
-        <div class="ref-frosted-card">
-          <div class="ref-card-metric">40+</div>
-          <h3 class="ref-card-title">Curated Systems</h3>
-          <p class="ref-card-desc">
-            Modular layout tokens and bespoke typography systems matched to your brand's ambitions so you always know where to start.
-          </p>
+      <figure class="manifesto-figure">
+        <img src="assets/studio_night.webp" alt="A person coding beside a desk lamp in a flower field under the stars" width="864" height="1080" loading="lazy">
+      </figure>
+      <div class="manifesto-meta">
+        <div class="meta-item">
+          <span class="meta-k">Team</span>
+          <span class="meta-v">Design, code and copy at one table</span>
         </div>
-
-        <div class="ref-frosted-card">
-          <div class="ref-card-metric">3 min</div>
-          <h3 class="ref-card-title">Fluid Motion</h3>
-          <p class="ref-card-desc">
-            60fps hardware-accelerated canvas animations keep each interaction tactile, natural, and effortless to repeat daily.
-          </p>
+        <div class="meta-item">
+          <span class="meta-k">Pace</span>
+          <span class="meta-v">Few projects, full attention</span>
         </div>
-
-        <div class="ref-frosted-card">
-          <div class="ref-card-metric">100%</div>
-          <h3 class="ref-card-title">Clear Progress</h3>
-          <p class="ref-card-desc">
-            Transparent sprint milestones, production-ready code delivery, and zero-compromise craft on every viewport.
-          </p>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ---------------------------------------------------------
-         2. BENTO CAPABILITIES SECTION
-         --------------------------------------------------------- -->
-    <section class="section-bento" id="capabilities">
-      <div class="section-header-center">
-        <span class="section-tag">Capabilities · 核心能力</span>
-        <h2 class="section-heading-serif">Crafted for visual distinction and effortless flow</h2>
-        <p class="section-subtext-center">
-          我们将前沿工程逻辑融入温暖的人文排版，为每一个数字载体赋予经得起推敲的工艺质感。
-        </p>
-      </div>
-
-      <div class="bento-grid">
-        <div class="bento-card">
-          <div class="bento-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-            </svg>
-          </div>
-          <h3 class="bento-card-title">60fps Canvas Storytelling</h3>
-          <p class="bento-card-desc">
-            突破传统静态排版束缚，以微秒级帧序列渲染引擎打造丝滑的视差叙事体验，零丢帧、零等待。
-          </p>
-          <span class="bento-pill-tag">0ms Scrub Latency</span>
-        </div>
-
-        <div class="bento-card">
-          <div class="bento-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="4 7 4 4 20 4 20 7"></polyline>
-              <line x1="9" y1="20" x2="15" y2="20"></line>
-              <line x1="12" y1="4" x2="12" y2="20"></line>
-            </svg>
-          </div>
-          <h3 class="bento-card-title">Editorial Typography</h3>
-          <p class="bento-card-desc">
-            精选兼具复古手作温润感与现代屏显清晰度的 Fraunces 衬线字体，字里行间传递不可替代的高级感。
-          </p>
-          <span class="bento-pill-tag">Bespoke Serifs</span>
-        </div>
-
-        <div class="bento-card">
-          <div class="bento-card-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-            </svg>
-          </div>
-          <h3 class="bento-card-title">Edge-Native Performance</h3>
-          <p class="bento-card-desc">
-            全球边缘加速节点与 4:4:4 全色彩空间直通，确保无论身处何地，页面均如丝绸般瞬时加载。
-          </p>
-          <span class="bento-pill-tag">Sub-Second Delivery</span>
+        <div class="meta-item">
+          <span class="meta-k">Standard</span>
+          <span class="meta-v">Every pixel checked before launch</span>
         </div>
       </div>
     </section>
 
-    <!-- ---------------------------------------------------------
-         3. THREE-STEP JOURNEY SECTION
-         --------------------------------------------------------- -->
-    <section class="section-journey" id="workflow">
-      <div class="section-header-center">
-        <span class="section-tag">Workflow · 绽放路径</span>
-        <h2 class="section-heading-serif">A clear path from initial idea to live launch</h2>
-        <p class="section-subtext-center">
-          告别繁复杂乱的沟通周期，以明确的三阶段交付体系，让每一次创意迭代都胸有成竹。
-        </p>
+    <!-- 2. INSIDE THE STUDIO: alternating text and stills from the cover film -->
+    <section class="studio" id="studio">
+      <div class="section-head">
+        <span class="eyebrow">Inside the Studio</span>
+        <h2 class="section-title">Quiet focus,<br><em>one direction</em></h2>
       </div>
 
-      <div class="journey-steps-grid">
-        <div class="journey-step-card">
-          <div class="journey-step-number">01</div>
-          <h3 class="journey-step-title">Brand DNA & Creative Spark</h3>
-          <p class="journey-step-desc">
-            深度梳理品牌核心价值与视觉语汇，提炼专属的色相、字体比例与交互基调，确立清晰的数字化旗舰目标。
-          </p>
-        </div>
-
-        <div class="journey-step-card">
-          <div class="journey-step-number">02</div>
-          <h3 class="journey-step-title">Motion Prototyping</h3>
-          <p class="journey-step-desc">
-            在真实的浏览器物理引擎中调试微交互与关键帧动力学，打磨出兼具弹性阻尼与精准手感的交互模型。
-          </p>
-        </div>
-
-        <div class="journey-step-card">
-          <div class="journey-step-number">03</div>
-          <h3 class="journey-step-title">Production & Global Bloom</h3>
-          <p class="journey-step-desc">
-            完成全端视口适配与严苛的性能压测，以工业级标准交付完整源代码，助推品牌在全网瞩目绽放。
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ---------------------------------------------------------
-         4. SELECTED WORKS SECTION
-         --------------------------------------------------------- -->
-    <section class="section-works" id="work">
-      <div class="section-header-center">
-        <span class="section-tag">Selected Works · 案例精选</span>
-        <h2 class="section-heading-serif">Thoughtful design, engineered to inspire</h2>
-        <p class="section-subtext-center">
-          每一个上线项目都是艺术品位与前沿工程深度碰撞的结晶。
-        </p>
-      </div>
-
-      <div class="works-grid">
-        <div class="work-item-card">
-          <div class="work-card-media work-card-media-bg1">
-            <span>Botanica Flora</span>
-          </div>
-          <div class="work-tags-row">
-            <span class="work-tag">Editorial</span>
-            <span class="work-tag">3D Motion</span>
-          </div>
-          <h3 class="work-title">Botanica Flora</h3>
-          <p class="work-desc">
-            为高端可持续植物美学工坊定制的叙事型数字旗舰，融合了微距植物形态与呼吸感视差滚动。
-          </p>
-        </div>
-
-        <div class="work-item-card">
-          <div class="work-card-media work-card-media-bg2">
-            <span>Aura Acoustics</span>
-          </div>
-          <div class="work-tags-row">
-            <span class="work-tag">Hardware</span>
-            <span class="work-tag">Canvas Scrub</span>
-          </div>
-          <h3 class="work-title">Aura Acoustics</h3>
-          <p class="work-desc">
-            为声学硬件品牌打造的高精互动拆解封面，通过用户滚轮实时探索精密声学腔体的内部构造。
-          </p>
-        </div>
-
-        <div class="work-item-card">
-          <div class="work-card-media work-card-media-bg3">
-            <span>Lumina Atelier</span>
-          </div>
-          <div class="work-tags-row">
-            <span class="work-tag">Architecture</span>
-            <span class="work-tag">Spatial Web</span>
-          </div>
-          <h3 class="work-title">Lumina Atelier</h3>
-          <p class="work-desc">
-            当代先锋建筑设计事务所的线上作品集，以纯净的留白与高对比度排版呈现空间的诗意张力。
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ---------------------------------------------------------
-         5. TESTIMONIALS SECTION
-         --------------------------------------------------------- -->
-    <section class="section-testimonials">
-      <div class="section-header-center">
-        <span class="section-tag">Voices · 客户心声</span>
-        <h2 class="section-heading-serif">Trusted by ambitious creative founders</h2>
-      </div>
-
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <p class="quote-text">
-            “WebBloom 带来的不仅是一套震撼的滚动交互，更是对我们品牌格调的深刻理解。上线首月，我们的咨询转化率便提升了 140%。”
-          </p>
-          <div class="quote-author">
-            <div class="author-avatar">EV</div>
-            <div>
-              <div class="author-name">Elena Vance</div>
-              <div class="author-role">Founder & Creative Director, Solstice</div>
-            </div>
+      <div class="studio-rows">
+        <div class="studio-row">
+          <figure class="row-media portrait">
+            <img src="assets/studio_desk_lamp.webp" alt="A woman working on a laptop at a small desk under a lamp, books beside her, in a flower field at night" width="900" height="1200" loading="lazy">
+          </figure>
+          <div class="row-text">
+            <span class="eyebrow">23:10 · Design</span>
+            <h3>Every margin,<br><em>considered</em></h3>
+            <p>Design isn’t filling a page. We tune a headline’s spacing and an image’s place until it feels exactly right.</p>
+            <ul class="row-list">
+              <li><span>01</span>Layout grid &amp; type scale</li>
+              <li><span>02</span>Colour, imagery &amp; mood</li>
+              <li><span>03</span>Every button, every state</li>
+            </ul>
           </div>
         </div>
 
-        <div class="testimonial-card">
-          <p class="quote-text">
-            “整个滚动过程非常自然，没有任何生硬的停顿或突兀的剪辑。那种温润质感的衬线字体与磨砂卡片搭配，完全呈现了我们想要的奢华底蕴。”
-          </p>
-          <div class="quote-author">
-            <div class="author-avatar">JT</div>
-            <div>
-              <div class="author-name">Julian Thorne</div>
-              <div class="author-role">Design Lead, Atelier Vesper</div>
-            </div>
+        <!-- a pause between the two photo rows: one sentence, its number counts up -->
+        <div class="studio-stats">
+          <p class="stat-line">We’ve helped <span class="stat-num" data-count="534">0</span> people bring their ideas to life on the web.</p>
+        </div>
+
+        <div class="studio-row reverse">
+          <figure class="row-media portrait">
+            <img src="assets/studio_flowers.webp" alt="A woman working on a laptop among wildflowers at night, a lamp glowing on a stack of books" width="900" height="1200" loading="lazy">
+          </figure>
+          <div class="row-text">
+            <span class="eyebrow">03:20 · Build</span>
+            <h3>Design that<br><em>actually runs</em></h3>
+            <p>Clean, unhurried code. Smooth motion, light images, instant on any phone — exactly as designed.</p>
+            <ul class="row-list">
+              <li><span>01</span>Tuned for desktop, tablet &amp; mobile</li>
+              <li><span>02</span>Optimised, lazy-loaded media</li>
+              <li><span>03</span>Pixel-checked before launch</li>
+            </ul>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ---------------------------------------------------------
-         6. CALL TO ACTION SECTION
-         --------------------------------------------------------- -->
-    <section class="section-cta" id="contact">
-      <div class="cta-banner-card">
-        <span class="section-tag">Get Started · 开启合作</span>
-        <h2 class="cta-heading">Ready to bloom your next digital experience?</h2>
-        <p class="cta-subtext">
-          无论您正在筹备全新品牌发布，或是希望重塑现有数字旗舰，我们都期待与您一起探讨无限可能。
-        </p>
-        <div class="cta-actions-row">
-          <a href="mailto:hello@webbloom.design" class="btn-pill-olive">
-            Schedule a Consultation
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12"></line>
-              <polyline points="12 5 19 12 12 19"></polyline>
-            </svg>
-          </a>
-          <button class="btn-pill-cream" onclick="scrollToMilestone(0)">
-            Back to Cover ↺
-          </button>
+    <!-- 3. HOW WE WORK: three steps, each desk lit by its own lamp -->
+    <section class="desks" id="capabilities">
+      <div class="section-head">
+        <span class="eyebrow">How We Work</span>
+        <h2 class="section-title">Three steps<br><em>to launch</em></h2>
+        <p class="section-lead">From first call to live site in about three days.</p>
+      </div>
+
+      <div class="desk-grid">
+        <article class="desk">
+          <div class="desk-lamp" aria-hidden="true"></div>
+          <span class="step-no" aria-hidden="true">01</span>
+          <span class="desk-no">Step 01</span>
+          <h3 class="desk-title">Discover</h3>
+          <p class="desk-desc">We learn your brand, your audience and the result you want, then agree on pages, content and style.</p>
+          <ul class="desk-list">
+            <li>Brand &amp; audience</li>
+            <li>Pages &amp; content</li>
+            <li>Visual direction</li>
+          </ul>
+        </article>
+        <div class="step-arrow" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </div>
+        <article class="desk">
+          <div class="desk-lamp" aria-hidden="true"></div>
+          <span class="step-no" aria-hidden="true">02</span>
+          <span class="desk-no">Step 02</span>
+          <h3 class="desk-title">Design &amp; Build</h3>
+          <p class="desk-desc">A design direction first, then every page built — with progress shared as we go.</p>
+          <ul class="desk-list">
+            <li>Design direction</li>
+            <li>Every page built</li>
+            <li>Live progress updates</li>
+          </ul>
+        </article>
+        <div class="step-arrow" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </div>
+        <article class="desk">
+          <div class="desk-lamp" aria-hidden="true"></div>
+          <span class="step-no" aria-hidden="true">03</span>
+          <span class="desk-no">Step 03</span>
+          <h3 class="desk-title">Test &amp; Launch</h3>
+          <p class="desk-desc">Tested on desktop, tablet and phone, then launched. Free revisions for a full year.</p>
+          <ul class="desk-list">
+            <li>Cross-device testing</li>
+            <li>Launch</li>
+            <li>1 year of free revisions</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- 6. VOICES: one quote at a time; add real client quotes as more <figure class="voice"> -->
+    <section class="voices" id="voices">
+      <div class="section-head">
+        <span class="eyebrow">Voices</span>
+        <h2 class="section-title">In their <em>words</em></h2>
+      </div>
+      <div class="voice-slider" id="voiceSlider" aria-roledescription="carousel" tabindex="0">
+        <div class="voice-side">
+          <div class="voice-count"><span id="voiceNo">01</span><small>/ <span id="voiceTotal">03</span></small></div>
+          <div class="voice-tabs" id="voiceTabs"></div>
+        </div>
+        <div class="voice-stage">
+          <div class="voice-track">
+            <figure class="voice" data-name="Client 01" data-role="Website project">
+              <span class="voice-mark" aria-hidden="true">“</span>
+              <blockquote>Extremely satisfied. They were so patient — whenever something didn’t feel right, they adjusted it straight away.</blockquote>
+              <figcaption><b>Client 01</b> — Website project</figcaption>
+            </figure>
+            <figure class="voice" data-name="Client 02" data-role="Website project">
+              <span class="voice-mark" aria-hidden="true">“</span>
+              <blockquote>Wonderfully creative. I’m very happy with how it turned out.</blockquote>
+              <figcaption><b>Client 02</b> — Website project</figcaption>
+            </figure>
+            <figure class="voice" data-name="Client 03" data-role="Website project">
+              <span class="voice-mark" aria-hidden="true">“</span>
+              <blockquote>Genuinely thoughtful and dedicated. A team you can trust.</blockquote>
+              <figcaption><b>Client 03</b> — Website project</figcaption>
+            </figure>
+          </div>
+          <div class="voice-nav">
+            <button class="voice-arrow" id="voicePrev" type="button" aria-label="Previous">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            </button>
+            <button class="voice-arrow" id="voiceNext" type="button" aria-label="Next">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ---------------------------------------------------------
-         7. SITE FOOTER
-         --------------------------------------------------------- -->
+    <!-- 7. DAWN CTA -->
+    <section class="dawn" id="contact">
+      <div class="dawn-sun" aria-hidden="true"></div>
+      <span class="eyebrow">Get Started</span>
+      <h2 class="dawn-title">The sun is rising.<br><em>Let your site bloom.</em></h2>
+      <p class="section-lead">Tell us about your idea. We’ll read every word and reply soon.</p>
+      <div class="dawn-actions">
+        <a href="mailto:hello@webbloom.design" class="btn-pill btn-pill-accent">
+          Schedule a Consultation
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+        <button class="btn-pill btn-pill-glass" onclick="scrollToMilestone(0)">Back to the Stars ↺</button>
+      </div>
+    </section>
+
+    <!-- AFTER DAWN: the warm sky sinks back into deep dark -->
+    <div class="after-dawn">
+
+    <!-- 8. FAQ -->
+    <section class="faq" id="faq">
+      <div class="section-head">
+        <span class="eyebrow">FAQ</span>
+        <h2 class="section-title">Before you <em>ask</em></h2>
+      </div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span class="faq-no">01</span><span class="faq-text">How long does a website take?</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>Usually <b>3 days</b>. We agree on the details first, then share progress at every step.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span class="faq-no">02</span><span class="faq-text">How much does it cost?</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>A standard website is <b>$150</b>; an interactive website is <b>$300</b>. The price is confirmed before we start — no hidden fees.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span class="faq-no">03</span><span class="faq-text">What do I need to prepare?</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>Just a rough idea: what your brand does, what the site should achieve, and any sites you admire. If your logo, copy or images aren’t ready, we’ll help.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span class="faq-no">04</span><span class="faq-text">Will it work on mobile?</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>Yes. Every page is tuned and tested on desktop, tablet and phone, with optimised images so it loads fast on mobile networks.</p></div></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" type="button" aria-expanded="false"><span class="faq-no">05</span><span class="faq-text">Can I make changes after launch?</span><span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><div><p>Yes. You receive clean, editable source code — and for <b>one year</b> after launch, we make changes for you <b>free of charge</b>.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. WORKS WALL: after dawn, everything that has launched -->
+    <section class="works-block" id="work" aria-label="Selected work">
+      <div class="section-head wall-intro">
+        <span class="eyebrow">Selected Works</span>
+        <h2 class="section-title">Already <em>live</em></h2>
+      </div>
+      <div class="works-wall" id="worksWall">
+      <div class="wall-environment" id="wallEnvironment">
+        <div class="wall-surface">
+          <svg class="wall-grid-lines" viewBox="0 0 1600 1000" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 190 Q800 255 1600 190"/><path d="M0 430 Q800 465 1600 430"/><path d="M0 690 Q800 675 1600 690"/><path d="M0 900 Q800 820 1600 900"/>
+            <path d="M155 0 Q90 500 155 1000"/><path d="M410 0 Q355 500 410 1000"/><path d="M680 0 Q655 500 680 1000"/><path d="M920 0 Q945 500 920 1000"/><path d="M1190 0 Q1240 500 1190 1000"/><path d="M1450 0 Q1510 500 1450 1000"/>
+            <path class="horizon" d="M0 76 Q800 130 1600 76"/><path class="horizon" d="M0 980 Q800 865 1600 980"/>
+          </svg>
+          <div class="wall-grid" id="projectGrid" aria-label="Projects"></div>
+        </div>
+      </div>
+      <div class="wall-label">Selected work / 2022—26</div>
+      <div class="wall-controls">
+        <div class="control-cluster" aria-label="View">
+          <button class="icon-button" id="gridView" type="button" aria-label="Grid view" aria-pressed="true"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2.5" y="2.5" width="6" height="6" stroke="currentColor"/><rect x="11.5" y="2.5" width="6" height="6" stroke="currentColor"/><rect x="2.5" y="11.5" width="6" height="6" stroke="currentColor"/><rect x="11.5" y="11.5" width="6" height="6" stroke="currentColor"/></svg></button>
+          <button class="icon-button" id="listView" type="button" aria-label="List view" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5h2m3 0h9M3 10h2m3 0h9M3 15h2m3 0h9" stroke="currentColor" stroke-width="1.2"/></svg></button>
+        </div>
+        <button class="filter-button" id="filterButton" type="button" aria-expanded="false" aria-controls="filterPopover">Filter <span class="filter-count" id="filterCount">15</span></button>
+      </div>
+      <aside class="filter-popover" id="filterPopover" aria-label="Filter projects"><h3>Filter projects</h3><div class="filter-options" id="filterOptions"></div></aside>
+      <div class="wall-count"><strong id="projectCount">15</strong> / <span id="totalProjects">15</span> projects</div>
+      </div>
+    </section>
+    <!-- 10. FOOTER -->
     <footer class="site-footer">
       <div class="footer-top-row">
         <div class="footer-brand-col">
-          <img src="assets/logo_cropped.png" alt="WebBloom" class="footer-logo">
-          <p class="footer-desc">
-            WebBloom 专注于高级数字艺术呈现、帧级动画编排与高性能网站架构。让创意在代码的世界里如花朵般自然绽放。
-          </p>
+          <img src="assets/logo_white.png" alt="WebBloom" class="footer-logo">
+          <p class="footer-desc">A small studio crafting cinematic, carefully built websites.</p>
         </div>
-
         <div class="footer-nav-cols">
           <div>
             <div class="footer-col-title">Navigation</div>
             <ul class="footer-links-list">
-              <li><a href="#overview">Overview</a></li>
-              <li><a href="#capabilities">Capabilities</a></li>
-              <li><a href="#workflow">Workflow</a></li>
-              <li><a href="#work">Selected Works</a></li>
+              <li><a href="#overview">About</a></li>
+              <li><a href="#studio">Studio</a></li>
+              <li><a href="#capabilities">Process</a></li>
+              <li><a href="#work">Works</a></li>
             </ul>
           </div>
-
           <div>
-            <div class="footer-col-title">Studio</div>
+            <div class="footer-col-title">Contact</div>
             <ul class="footer-links-list">
-              <li><a href="#about">About WebBloom</a></li>
-              <li><a href="#careers">Careers</a></li>
-              <li><a href="#press">Press & Media</a></li>
-              <li><a href="#contact">Contact Us</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <div class="footer-col-title">Connect</div>
-            <ul class="footer-links-list">
-              <li><a href="#">X / Twitter</a></li>
-              <li><a href="#">Instagram</a></li>
-              <li><a href="#">LinkedIn</a></li>
-              <li><a href="#">GitHub</a></li>
+              <li><a href="#contact">Start a project</a></li>
+              <li><a href="mailto:hello@webbloom.design">Email</a></li>
             </ul>
           </div>
         </div>
       </div>
-
       <div class="footer-bottom-row">
-        <span>© 2026 WebBloom Design Studio. All rights reserved.</span>
-        <button class="jump-btn" style="color: #4a574e; background: rgba(0,0,0,0.05); padding: 6px 14px; border-radius: 9999px;" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
-          ↑ 返回顶部 · Top
-        </button>
+        <span>© 2026 WebBloom Design Studio</span>
+        <button class="footer-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Top</button>
       </div>
     </footer>
 
+    </div>
+
+  </div>
+
+  <div class="wall-cursor" id="wallCursor" aria-hidden="true">VIEW ↗</div>
+  <div class="project-modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
+    <article class="modal-card">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Close">×</button>
+      <img class="modal-image" id="modalImage" src="" alt="">
+      <div class="modal-body">
+        <div><h2 id="modalTitle"></h2><p id="modalDescription"></p></div>
+        <div class="modal-meta" id="modalMeta"></div>
+      </div>
+    </article>
   </div>
 
   <!-- High-Performance Canvas Engine (Pure Scroll-Scrubbed) -->
@@ -1753,27 +2267,41 @@
       const heroIntro = document.getElementById('heroIntro');
       const heroOutro = document.getElementById('heroOutro');
       const brandCard = document.getElementById('brandCard');
-      const scrubFill = document.getElementById('scrubFill');
-      const hudPercent = document.getElementById('hudPercent');
-      const scrollCue = document.getElementById('scrollCue');
-      const scrollCueText = document.getElementById('scrollCueText');
-      const scrubTrack = document.getElementById('scrubTrack');
 
-      // Preload 301 extracted frames
-      const TOTAL_FRAMES = 301;
+      // 151 compressed WebP frames; phones get a smaller 960px set
+      const TOTAL_FRAMES = 151;
+      const FRAME_DIR = window.innerWidth <= 768 ? 'assets/frames_mobile' : 'assets/frames_desktop';
       const images = new Array(TOTAL_FRAMES);
       let lastDrawnIndex = 0;
 
-      for (let i = 1; i <= TOTAL_FRAMES; i++) {
-        const img = new Image();
-        const paddedIndex = String(i).padStart(4, '0');
-        img.src = `assets/frames/frame_${paddedIndex}.jpg`;
-        if (i === 1) {
-          img.onload = () => renderFrame(0);
-          if (img.complete) renderFrame(0);
+      // Load order: first frame, then coarse-to-fine (every 16th, 8th, 4th, 2nd, rest)
+      // so scrubbing works early and fills in detail as more frames arrive
+      const loadOrder = [0];
+      const queued = new Set(loadOrder);
+      for (let step = 16; step >= 1; step /= 2) {
+        for (let i = 0; i < TOTAL_FRAMES; i += step) {
+          if (!queued.has(i)) { queued.add(i); loadOrder.push(i); }
         }
-        images[i - 1] = img;
       }
+      if (!queued.has(TOTAL_FRAMES - 1)) loadOrder.splice(1, 0, TOTAL_FRAMES - 1);
+
+      const MAX_PARALLEL = 6;
+      let nextToLoad = 0;
+      function loadNext() {
+        if (nextToLoad >= loadOrder.length) return;
+        const index = loadOrder[nextToLoad++];
+        const img = new Image();
+        img.decoding = 'async';
+        const done = () => {
+          if (index === lastDrawnIndex || index === 0) renderFrame(lastDrawnIndex);
+          loadNext();
+        };
+        img.onload = done;
+        img.onerror = loadNext;
+        img.src = `${FRAME_DIR}/f_${String(index + 1).padStart(3, '0')}.webp`;
+        images[index] = img;
+      }
+      for (let i = 0; i < MAX_PARALLEL; i++) loadNext();
 
       // Resize canvas for sharp Retina / HiDPI display
       function resizeCanvas() {
@@ -1793,11 +2321,13 @@
         lastDrawnIndex = index;
         const img = images[index];
         if (!img || !img.complete || img.naturalWidth === 0) {
-          for (let offset = 1; offset < 10; offset++) {
-            const fallback = images[index - offset] || images[index + offset];
-            if (fallback && fallback.complete && fallback.naturalWidth > 0) {
-              drawCover(fallback);
-              return;
+          // Frame not loaded yet: show the nearest one that is
+          for (let offset = 1; offset < TOTAL_FRAMES; offset++) {
+            for (const fallback of [images[index - offset], images[index + offset]]) {
+              if (fallback && fallback.complete && fallback.naturalWidth > 0) {
+                drawCover(fallback);
+                return;
+              }
             }
           }
           return;
@@ -1830,13 +2360,11 @@
       // Smooth scroll state
       let targetProgress = 0;
       let currentProgress = 0;
-      let isDraggingScrubber = false;
 
       const navbar = document.getElementById('navbar');
       const viewportStage = document.getElementById('viewportStage');
 
       function updateScrollFraction() {
-        if (isDraggingScrubber) return;
         const totalScroll = scrollTrack.offsetHeight - window.innerHeight;
         if (totalScroll <= 0) return;
         const scrollY = window.pageYOffset || document.documentElement.scrollTop;
@@ -1863,52 +2391,6 @@
       });
       updateScrollFraction();
 
-      // Click / Drag Scrubber
-      function handleScrubInteract(e) {
-        const rect = scrubTrack.getBoundingClientRect();
-        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-        const fraction = Math.min(Math.max((clientX - rect.left) / rect.width, 0), 1);
-        
-        targetProgress = fraction;
-        currentProgress = fraction;
-        
-        const totalScroll = scrollTrack.offsetHeight - window.innerHeight;
-        window.scrollTo({
-          top: fraction * totalScroll,
-          behavior: 'auto'
-        });
-      }
-
-      scrubTrack.addEventListener('mousedown', function(e) {
-        isDraggingScrubber = true;
-        handleScrubInteract(e);
-        function onMouseMove(moveEvent) {
-          if (isDraggingScrubber) handleScrubInteract(moveEvent);
-        }
-        function onMouseUp() {
-          isDraggingScrubber = false;
-          window.removeEventListener('mousemove', onMouseMove);
-          window.removeEventListener('mouseup', onMouseUp);
-        }
-        window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('mouseup', onMouseUp);
-      });
-
-      scrubTrack.addEventListener('touchstart', function(e) {
-        isDraggingScrubber = true;
-        handleScrubInteract(e);
-      }, { passive: true });
-
-      window.addEventListener('touchmove', function(e) {
-        if (isDraggingScrubber) handleScrubInteract(e);
-      }, { passive: true });
-
-      window.addEventListener('touchend', function() {
-        isDraggingScrubber = false;
-      });
-
-
-
       function renderLoop() {
         // Damping factor (0.14) for buttery-smooth inertial response
         const lerpFactor = 0.14;
@@ -1925,11 +2407,6 @@
         );
 
         renderFrame(targetFrameIndex);
-
-        // 2. HUD Scrubber Update
-        const percentStr = Math.round(currentProgress * 100) + '%';
-        scrubFill.style.width = percentStr;
-        hudPercent.textContent = percentStr;
 
         // 3. Stage 1: Intro Cover Transition (0% ~ 22%)
         const introFadeEnd = 0.22;
@@ -1967,18 +2444,6 @@
             heroOutro.classList.remove('active');
             heroOutro.style.pointerEvents = 'none';
           }
-        }
-
-        // 5. Scroll Cue Text Update
-        if (currentProgress < 0.1) {
-          scrollCue.style.opacity = '1';
-          scrollCueText.textContent = '向下滚动推进视频 · Scroll down';
-        } else if (currentProgress > 0.88) {
-          scrollCue.style.opacity = '1';
-          scrollCueText.textContent = '继续向下滚动进入网站 · Scroll to enter website ↓';
-        } else {
-          scrollCue.style.opacity = '0.5';
-          scrollCueText.textContent = '滚动控制播放 · Scrubbing';
         }
 
         requestAnimationFrame(renderLoop);
@@ -2022,6 +2487,372 @@
         });
       });
 
+    })();
+  </script>
+
+  <!-- Night Studio interactions: sky, manifesto, voices, FAQ, works wall -->
+  <script>
+    (function() {
+      const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const canHover = matchMedia('(hover: hover)').matches;
+      const pageContent = document.getElementById('pageContent');
+      const navbar = document.getElementById('navbar');
+      const clamp01 = v => Math.min(1, Math.max(0, v));
+
+      // ---------- Mobile menu ----------
+      const navToggle = document.getElementById('navToggle');
+      function setMenu(open) {
+        navbar.classList.toggle('nav-open', open);
+        navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      navToggle.addEventListener('click', () => setMenu(!navbar.classList.contains('nav-open')));
+      navbar.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => setMenu(false)));
+
+      // ---------- Reveal on scroll ----------
+      const revealTargets = document.querySelectorAll('.section-head, .manifesto-figure, .manifesto-meta, .row-media, .row-text, .studio-stats, .desk, .voice-slider, .faq-item, .dawn > *:not(.dawn-sun), .site-footer');
+      const revealIO = new IntersectionObserver(entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); }
+      }), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+      revealTargets.forEach(el => {
+        el.classList.add('reveal');
+        el.style.setProperty('--delay', ([...el.parentElement.children].indexOf(el) % 4 * 0.1) + 's');
+        revealIO.observe(el);
+      });
+
+      // ---------- Desks: on touch screens the lamp turns on when the desk is in view ----------
+      if (!canHover) {
+        const deskIO = new IntersectionObserver(entries => entries.forEach(e => e.target.classList.toggle('lit', e.isIntersecting)),
+          { rootMargin: '-35% 0px -35% 0px' });
+        document.querySelectorAll('.desk').forEach(d => deskIO.observe(d));
+      }
+
+      // ---------- Manifesto: characters light up as you read down ----------
+      const manifesto = document.getElementById('manifestoText');
+      const chars = [];
+      const words = manifesto.textContent.split(/(\s+)/);
+      manifesto.textContent = '';
+      words.forEach(w => {
+        if (/^\s+$/.test(w)) { manifesto.appendChild(document.createTextNode(w)); return; }
+        const s = document.createElement('span');
+        s.className = 'ch';
+        s.textContent = w;
+        manifesto.appendChild(s);
+        chars.push(s);
+      });
+      let litCount = -1;
+      function updateManifesto() {
+        const r = manifesto.getBoundingClientRect(), vh = window.innerHeight;
+        const p = calm ? 1 : clamp01((vh * 0.85 - r.top) / (r.height + vh * 0.35));
+        const n = Math.round(p * chars.length);
+        if (n === litCount) return;
+        chars.forEach((s, i) => s.classList.toggle('lit', i < n));
+        litCount = n;
+      }
+
+      // Studio clock in the eyebrow: one minute passes every few seconds
+      const clockEl = document.getElementById('studioClock');
+      let clockMin = 2 * 60 + 14;
+      setInterval(() => {
+        clockMin = (clockMin + 1) % (24 * 60);
+        clockEl.textContent = String(Math.floor(clockMin / 60)).padStart(2, '0') + ':' + String(clockMin % 60).padStart(2, '0');
+      }, 6000);
+
+      // ---------- Voices: autoplay slider with arrows, dots, swipe and keys ----------
+      const slider = document.getElementById('voiceSlider');
+      const voices = [...slider.querySelectorAll('.voice')];
+      const tabsWrap = document.getElementById('voiceTabs');
+      const voiceNo = document.getElementById('voiceNo');
+      const pad2v = n => String(n).padStart(2, '0');
+      document.getElementById('voiceTotal').textContent = pad2v(voices.length);
+      const VOICE_MS = 7000;
+      slider.style.setProperty('--voice-ms', VOICE_MS + 'ms');
+      tabsWrap.innerHTML = voices.map(v => `<button class="voice-tab" type="button"><b>${v.dataset.name}</b><span>${v.dataset.role}</span><i></i></button>`).join('');
+      const dots = [...tabsWrap.children];
+      let voiceIndex = 0, voiceTimer = null, voiceLeft = VOICE_MS, voiceStarted = 0, voicePaused = false, voiceVisible = false;
+
+      function showVoice(i) {
+        const prev = voiceIndex;
+        voiceIndex = (i + voices.length) % voices.length;
+        voices.forEach((v, k) => {
+          v.classList.toggle('active', k === voiceIndex);
+          v.classList.toggle('leaving', k === prev && k !== voiceIndex);
+          v.setAttribute('aria-hidden', k === voiceIndex ? 'false' : 'true');
+        });
+        dots.forEach((d, k) => {
+          d.classList.remove('active');
+          void d.offsetWidth; // restart the progress animation
+          if (k === voiceIndex) d.classList.add('active');
+        });
+        voiceNo.textContent = pad2v(voiceIndex + 1);
+        voiceLeft = VOICE_MS;
+        scheduleVoice();
+      }
+      function scheduleVoice() {
+        clearTimeout(voiceTimer);
+        if (voicePaused || !voiceVisible || calm || voices.length < 2) return;
+        voiceStarted = performance.now();
+        voiceTimer = setTimeout(() => showVoice(voiceIndex + 1), voiceLeft);
+      }
+      function pauseVoice(on) {
+        if (on === voicePaused) return;
+        voicePaused = on;
+        slider.classList.toggle('paused', on || !voiceVisible);
+        if (on) { clearTimeout(voiceTimer); voiceLeft -= performance.now() - voiceStarted; }
+        else scheduleVoice();
+      }
+      document.getElementById('voicePrev').addEventListener('click', () => showVoice(voiceIndex - 1));
+      document.getElementById('voiceNext').addEventListener('click', () => showVoice(voiceIndex + 1));
+      dots.forEach((d, k) => d.addEventListener('click', () => showVoice(k)));
+      slider.addEventListener('mouseenter', () => pauseVoice(true));
+      slider.addEventListener('mouseleave', () => pauseVoice(false));
+      slider.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft') showVoice(voiceIndex - 1);
+        if (e.key === 'ArrowRight') showVoice(voiceIndex + 1);
+      });
+      let swipeX = null;
+      slider.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') swipeX = e.clientX; });
+      slider.addEventListener('pointerup', e => {
+        if (swipeX === null) return;
+        const dx = e.clientX - swipeX;
+        swipeX = null;
+        if (Math.abs(dx) > 40) showVoice(voiceIndex + (dx < 0 ? 1 : -1));
+      });
+      new IntersectionObserver(([e]) => {
+        voiceVisible = e.isIntersecting;
+        slider.classList.toggle('paused', voicePaused || !voiceVisible);
+        if (voiceVisible) scheduleVoice(); else clearTimeout(voiceTimer);
+      }, { threshold: 0.4 }).observe(slider);
+      showVoice(0);
+
+      // ---------- FAQ: one answer open at a time ----------
+      const faqItems = [...document.querySelectorAll('.faq-item')];
+      faqItems.forEach(item => item.querySelector('.faq-q').addEventListener('click', () => {
+        const open = !item.classList.contains('open');
+        faqItems.forEach(other => {
+          other.classList.toggle('open', other === item && open);
+          other.querySelector('.faq-q').setAttribute('aria-expanded', String(other === item && open));
+        });
+      }));
+
+      // ---------- Works wall (ported from the FORME studio site) ----------
+      const projects = [
+        {slug:"nami-house",name:"Nami House",title:"A slower kind of escape",year:"2026",category:"Hotel",tags:["Hospitality","Website"],client:"Nami House",description:"A quiet digital welcome for a coastal retreat, balancing useful booking details with the feeling of arriving somewhere else.",image:"https://images.unsplash.com/photo-1594433575301-cf59b8ada6b1?auto=format&fit=crop&w=1000&q=82",alt:"Tropical resort pool surrounded by palms"},
+        {slug:"sunday-table",name:"Sunday Table",title:"Food with a point of view",year:"2026",category:"Restaurant",tags:["Restaurant","Identity"],client:"Sunday Table",description:"A warm, editorial home for a neighbourhood restaurant built around seasonal ingredients and long lunches.",image:"https://images.unsplash.com/photo-1685040235380-a42a129ade4e?auto=format&fit=crop&w=1000&q=82",alt:"Sunlit contemporary restaurant interior"},
+        {slug:"form-and-field",name:"Form & Field",title:"Objects for living well",year:"2025",category:"E-commerce",tags:["E-commerce","Objects"],client:"Form & Field",description:"An understated storefront that gives considered furniture and everyday objects the room they deserve.",image:"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1000&q=82",alt:"Sculptural contemporary furniture and warm interior"},
+        {slug:"luma-skin",name:"Luma Skin",title:"A daily ritual, reimagined",year:"2025",category:"Beauty",tags:["Beauty","E-commerce"],client:"Luma Skin",description:"A clean, tactile product experience for a small-batch skincare line inspired by botanical rituals.",image:"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1000&q=82",alt:"Minimal skincare bottles arranged in soft light"},
+        {slug:"monolith",name:"Monolith",title:"Quiet strength in every line",year:"2024",category:"Real Estate",tags:["Architecture","Website"],client:"Monolith Studio",description:"A portfolio site for an architecture practice, translating material restraint into a clear digital language.",image:"https://images.unsplash.com/photo-1746911779503-f16ee2088257?auto=format&fit=crop&w=1000&q=82",alt:"Geometric concrete architecture in late afternoon light"},
+        {slug:"common-ground",name:"Common Ground",title:"A place to come together",year:"2024",category:"Corporate",tags:["Community","Platform"],client:"Common Ground",description:"A welcoming online hub for a shared workspace, with a simple path from discovering a space to joining it.",image:"https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=82",alt:"Light-filled shared creative studio"},
+        {slug:"studio-edo",name:"Studio Edo",title:"A practice in contrast",year:"2023",category:"Portfolio",tags:["Portfolio","Identity"],client:"Studio Edo",description:"A compact portfolio that lets material, image and typography express an independent creative practice.",image:"https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1000&q=82",alt:"Contemporary installation in a dark gallery"},
+        {slug:"citrus-club",name:"Citrus Club",title:"Bright ideas, simply served",year:"2023",category:"Experimental",tags:["Experimental","Digital"],client:"Citrus Club",description:"An expressive digital campaign for a playful new take on fresh food and everyday wellbeing.",image:"https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&w=1000&q=82",alt:"Bright citrus fruit arranged against a natural backdrop"},
+        {slug:"serein",name:"Serein",title:"The art of slowing down",year:"2026",category:"Hotel",tags:["Hospitality","Digital"],client:"Serein Retreat",description:"A calm, image-led digital home for a place to pause, reset and reconnect with the landscape.",image:"https://images.unsplash.com/photo-1726397461856-1c6f801746ef?auto=format&fit=crop&w=1000&q=82",alt:"Palm-framed resort pool under open sky"},
+        {slug:"atelier-brut",name:"Atelier Brut",title:"Built around the essential",year:"2025",category:"Real Estate",tags:["Architecture","Portfolio"],client:"Atelier Brut",description:"A focused digital portfolio for an architecture studio drawn to strong forms and honest materials.",image:"https://images.unsplash.com/photo-1736805049006-0fdfcc1e719e?auto=format&fit=crop&w=1000&q=82",alt:"Concrete architecture with deep horizontal lines"},
+        {slug:"soft-form",name:"Soft Form",title:"Clothes made to keep",year:"2024",category:"E-commerce",tags:["Fashion","E-commerce"],client:"Soft Form",description:"A refined shopfront for thoughtful wardrobe staples, with a visual language built around texture and silhouette.",image:"https://images.unsplash.com/photo-1613728455120-d00493b5e77e?auto=format&fit=crop&w=1000&q=82",alt:"Dark garment arranged as an editorial still life"},
+        {slug:"still-studio",name:"Still Studio",title:"A study in material",year:"2023",category:"Portfolio",tags:["Studio","Website"],client:"Still Studio",description:"A restrained, image-first portfolio for a multidisciplinary practice working across space and objects.",image:"https://images.unsplash.com/photo-1593043799402-4365e10524b8?auto=format&fit=crop&w=1000&q=82",alt:"Monochrome study of sculptural concrete architecture"},
+        {slug:"onda-coffee",name:"Onda Coffee",title:"A brighter daily ritual",year:"2025",category:"Restaurant",tags:["Food","Identity"],client:"Onda Coffee",description:"A lively identity and digital home for a neighbourhood coffee bar built around good light, careful sourcing and a welcoming counter.",image:"https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1000&q=82",alt:"Warm independent coffee shop interior"},
+        {slug:"atelier-no-7",name:"Atelier No. 7",title:"Made for the long run",year:"2024",category:"E-commerce",tags:["Fashion","E-commerce"],client:"Atelier No. 7",description:"A considered storefront for everyday clothing, pairing tactile photography with a straightforward shopping experience.",image:"https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1000&q=82",alt:"Fashion editorial with models walking through a city"},
+        {slug:"field-notes",name:"Field Notes",title:"A studio in the open",year:"2023",category:"Portfolio",tags:["Studio","Identity"],client:"Field Notes Studio",description:"A flexible portfolio for a small creative studio, bringing its identity, selected work and process into one clear place.",image:"https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=82",alt:"Minimal creative studio with shared desks"},
+      ];
+      const categories = ['All', ...new Set(projects.map(p => p.category))];
+      const wallStage = document.getElementById('worksWall');
+      const wallEnv = document.getElementById('wallEnvironment');
+      const projectGrid = document.getElementById('projectGrid');
+      const wallCursor = document.getElementById('wallCursor');
+      const filterButton = document.getElementById('filterButton');
+      const filterPopover = document.getElementById('filterPopover');
+      const modal = document.getElementById('projectModal');
+      const escapeHtml = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+      const pad2 = n => String(n).padStart(2, '0');
+
+      projectGrid.innerHTML = projects.map(p => `<button class="project-tile" type="button" data-project="${escapeHtml(p.slug)}" data-category="${escapeHtml(p.category)}" aria-label="View ${escapeHtml(p.name)}">
+        <span class="tile-top"><span class="year">${escapeHtml(p.year)}</span><span class="tags">${p.tags.map(escapeHtml).join(' · ')}</span></span>
+        <span class="tile-content"><span class="tile-name">${escapeHtml(p.name)}</span><span class="tile-type">${escapeHtml(p.title)}</span></span>
+        <span class="tile-image-wrap"><img class="tile-image" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.alt)}" loading="lazy"></span>
+        <span class="tile-bottom"><span>${escapeHtml(p.client)}</span><span class="open-mark" aria-hidden="true">↗</span></span>
+      </button>`).join('');
+      document.getElementById('totalProjects').textContent = pad2(projects.length);
+      document.getElementById('projectCount').textContent = pad2(projects.length);
+      document.getElementById('filterCount').textContent = pad2(projects.length);
+
+      const tiles = [...projectGrid.querySelectorAll('.project-tile')];
+      tiles.forEach(tile => tile.addEventListener('click', () => openProject(tile.dataset.project)));
+      if (canHover) {
+        tiles.forEach(tile => {
+          tile.addEventListener('mouseenter', () => wallCursor.classList.add('is-visible'));
+          tile.addEventListener('mouseleave', () => wallCursor.classList.remove('is-visible'));
+          tile.addEventListener('mousemove', e => {
+            tile.style.setProperty('--image-tilt', `${((e.clientX - tile.getBoundingClientRect().left) / tile.clientWidth - 0.5) * 3}deg`);
+          });
+        });
+        // the whole wall leans gently toward the cursor
+        wallStage.addEventListener('mousemove', e => {
+          const r = wallStage.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+          wallEnv.style.setProperty('--mx', `${-x * 12}px`);
+          wallEnv.style.setProperty('--my', `${-y * 8}px`);
+          wallEnv.style.setProperty('--tilt', `${x * 1.2}deg`);
+          wallCursor.style.left = `${e.clientX}px`;
+          wallCursor.style.top = `${e.clientY}px`;
+        });
+        wallStage.addEventListener('mouseleave', () => {
+          wallEnv.style.setProperty('--mx', '0px');
+          wallEnv.style.setProperty('--my', '0px');
+          wallCursor.classList.remove('is-visible');
+        });
+      }
+
+      document.getElementById('filterOptions').innerHTML = categories.map((c, i) =>
+        `<button class="filter-option" type="button" data-filter="${escapeHtml(c)}" aria-pressed="${i === 0}">${escapeHtml(c)}</button>`).join('');
+      document.querySelectorAll('.filter-option').forEach(btn => btn.addEventListener('click', () => applyFilter(btn.dataset.filter)));
+      function applyFilter(category) {
+        let shown = 0;
+        tiles.forEach(tile => {
+          const visible = category === 'All' || tile.dataset.category === category;
+          tile.classList.toggle('filtered-out', !visible);
+          if (visible) shown++;
+        });
+        document.querySelectorAll('.filter-option').forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.filter === category)));
+        document.getElementById('projectCount').textContent = pad2(shown);
+        document.getElementById('filterCount').textContent = pad2(shown);
+        setFilterOpen(false);
+      }
+      function setFilterOpen(open) {
+        filterPopover.classList.toggle('open', open);
+        filterButton.setAttribute('aria-expanded', String(open));
+      }
+      filterButton.addEventListener('click', () => setFilterOpen(!filterPopover.classList.contains('open')));
+      document.addEventListener('click', e => {
+        if (!filterPopover.contains(e.target) && !filterButton.contains(e.target)) setFilterOpen(false);
+      });
+
+      function setView(mode) {
+        wallStage.classList.toggle('view-list', mode === 'list');
+        document.getElementById('gridView').setAttribute('aria-pressed', String(mode === 'grid'));
+        document.getElementById('listView').setAttribute('aria-pressed', String(mode === 'list'));
+      }
+      document.getElementById('gridView').addEventListener('click', () => setView('grid'));
+      document.getElementById('listView').addEventListener('click', () => setView('list'));
+
+      function openProject(slug) {
+        const p = projects.find(item => item.slug === slug);
+        if (!p) return;
+        document.getElementById('modalImage').src = p.image;
+        document.getElementById('modalImage').alt = p.alt;
+        document.getElementById('modalTitle').textContent = p.name;
+        document.getElementById('modalDescription').textContent = p.description;
+        document.getElementById('modalMeta').textContent = `${p.year} / ${p.category} / ${p.tags.join(' · ')}`;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        wallCursor.classList.remove('is-visible');
+        document.getElementById('modalClose').focus();
+      }
+      function closeProject() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+      document.getElementById('modalClose').addEventListener('click', closeProject);
+      modal.addEventListener('click', e => { if (e.target === modal) closeProject(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProject(); });
+
+      // ---------- Night sky: twinkling stars, fading into dawn near the bottom ----------
+      // Static stars behind the cover's closing logo
+      const outroStars = document.getElementById('outroStars');
+      function paintOutroStars() {
+        const r = Math.min(window.devicePixelRatio || 1, 2), w = window.innerWidth, h = window.innerHeight;
+        outroStars.width = Math.round(w * r); outroStars.height = Math.round(h * r);
+        const c = outroStars.getContext('2d');
+        c.setTransform(r, 0, 0, r, 0, 0);
+        c.fillStyle = '#fff';
+        for (let i = 0, n = w < 768 ? 110 : 240; i < n; i++) {
+          c.globalAlpha = 0.15 + Math.random() * 0.6;
+          const size = Math.random() * 1.2 + 0.3;
+          c.fillRect(Math.random() * w, Math.random() * h, size, size);
+        }
+      }
+      paintOutroStars();
+      window.addEventListener('resize', paintOutroStars);
+
+      const sky = document.getElementById('nightSky');
+      const dawnSection = document.getElementById('contact');
+      const dawnSun = dawnSection.querySelector('.dawn-sun');
+      const ctx = sky.getContext('2d');
+      let W = 0, H = 0, dpr = 1, stars = [], lastScrollY = window.scrollY;
+
+      function sizeSky() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth; H = window.innerHeight;
+        sky.width = Math.round(W * dpr); sky.height = Math.round(H * dpr);
+        const nStars = W < 768 ? 110 : 220;
+        stars = Array.from({ length: nStars }, () => ({
+          x: Math.random() * W, y: Math.random() * H, r: Math.random() * 1.2 + 0.25,
+          tw: Math.random() * 6.28, sp: 0.6 + Math.random() * 1.6, depth: 0.2 + Math.random() * 0.8
+        }));
+      }
+      sizeSky();
+      window.addEventListener('resize', sizeSky);
+
+      const mix = (a, b, t) => a.map((v, i) => Math.round(v + (b[i] - v) * t));
+      const rgb = c => `rgb(${c[0]},${c[1]},${c[2]})`;
+      const NIGHT_TOP = [11, 19, 36], NIGHT_BOTTOM = [11, 19, 36];
+      const DAWN_TOP = [24, 30, 58], DAWN_BOTTOM = [214, 140, 112];
+
+      function drawSky(t) {
+        const pr = pageContent.getBoundingClientRect();
+        const dy = window.scrollY - lastScrollY;
+        lastScrollY = window.scrollY;
+        if (pr.top >= H) { sky.style.visibility = 'hidden'; return; }
+        sky.style.visibility = 'visible';
+        // fixed canvas: clip it so it never paints over the cinematic cover
+        sky.style.clipPath = pr.top > 0 ? `inset(${pr.top}px 0 0 0)` : 'none';
+
+        // dawn rises as the dawn section scrolls in, and stays for the works wall after it
+        const dawn = clamp01((H * 1.1 - dawnSection.getBoundingClientRect().top) / H);
+        if (!calm) dawnSun.style.setProperty('--rise', dawn.toFixed(3));
+
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const g = ctx.createLinearGradient(0, 0, 0, H);
+        g.addColorStop(0, rgb(mix(NIGHT_TOP, DAWN_TOP, dawn)));
+        g.addColorStop(1, rgb(mix(NIGHT_BOTTOM, DAWN_BOTTOM, dawn * 0.9)));
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W, H);
+
+        // stars drift slightly with scroll (parallax) and twinkle
+        const starAlpha = 1 - dawn * 0.85;
+        ctx.fillStyle = '#fff';
+        for (const s of stars) {
+          s.y -= dy * 0.06 * s.depth;
+          if (s.y < 0) s.y += H; else if (s.y > H) s.y -= H;
+          const a = (0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * s.sp + s.tw))) * starAlpha * (0.4 + s.depth * 0.6);
+          ctx.globalAlpha = a;
+          ctx.fillRect(s.x, s.y, s.r, s.r);
+        }
+        ctx.globalAlpha = 1;
+      }
+
+      // The figure counts up once, when it scrolls into view
+      document.querySelectorAll('.stat-num').forEach(el => {
+        const target = +el.dataset.count;
+        const setNum = n => { el.firstChild.nodeValue = String(n); };
+        if (calm) { setNum(target); return; }
+        const countIO = new IntersectionObserver(([e]) => {
+          if (!e.isIntersecting) return;
+          countIO.disconnect();
+          const t0 = performance.now(), dur = target > 20 ? 1800 : 1200;
+          (function tick(now) {
+            const p = Math.min(1, (now - t0) / dur);
+            setNum(Math.round(target * (1 - Math.pow(1 - p, 3))));
+            if (p < 1) requestAnimationFrame(tick);
+          })(t0);
+        }, { threshold: 0.6 });
+        countIO.observe(el);
+      });
+
+      function loop(ms) {
+        drawSky(ms / 1000);
+        updateManifesto();
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
     })();
   </script>
 </body>
