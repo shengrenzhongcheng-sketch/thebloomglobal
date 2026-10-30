@@ -1348,6 +1348,14 @@
 
     .contact-field textarea::placeholder { color: rgba(232, 236, 244, 0.3); }
 
+    /* browser autofill would otherwise paint the fields white */
+    .contact-field input:-webkit-autofill {
+      -webkit-text-fill-color: #e8ecf4;
+      -webkit-box-shadow: 0 0 0 40px #141e35 inset;
+      caret-color: #e8ecf4;
+      transition: background-color 9999s ease 0s;
+    }
+
     /* focus lights the field like a lamp */
     .contact-field input:focus,
     .contact-field textarea:focus {
@@ -1978,7 +1986,7 @@
           <textarea name="message" rows="3" required maxlength="4000" placeholder="What is the site for, and is there anything you already have in mind?"></textarea>
         </label>
         <!-- left empty by people; bots that fill it are dropped -->
-        <input class="contact-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input class="contact-honey" type="text" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button class="btn-pill btn-pill-accent contact-submit" id="contactSubmit" type="submit">Send message</button>
         <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
       </form>
@@ -2394,8 +2402,8 @@
         });
       }));
 
-      // ---------- Contact form: sent through FormSubmit; says "sent" only when it really was ----------
-      const CONTACT_EMAIL = 'jackjhg609@gmail.com'; // address that receives enquiries
+      // ---------- Contact form: sent through Web3Forms; says "sent" only when it really was ----------
+      const WEB3FORMS_KEY = '967b08ac-d521-4cd1-a79f-52f2a41e149b'; // access key tied to the receiving inbox (safe to publish)
       const contactDialog = document.getElementById('contactDialog');
       const contactForm = document.getElementById('contactForm');
       const contactStatus = document.getElementById('contactStatus');
@@ -2425,16 +2433,16 @@
           return;
         }
         const data = Object.fromEntries(new FormData(contactForm));
-        if (data._honey) return;
-        if (!CONTACT_EMAIL) { contactStatus.textContent = 'Sorry — the form is not connected yet.'; return; }
+        if (data.botcheck) return;
+        if (!WEB3FORMS_KEY) { contactStatus.textContent = 'Sorry — the form is not connected yet.'; return; }
         contactSubmit.disabled = true;
         contactSubmit.textContent = 'Sending…';
         contactStatus.textContent = '';
         try {
-          const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+          const res = await fetch('https://api.web3forms.com/submit', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body: JSON.stringify({ ...data, _replyto: data.email, _subject: `New project enquiry from ${data.name}`, _template: 'table', _captcha: 'false' })
+            body: JSON.stringify({ ...data, access_key: WEB3FORMS_KEY, subject: `New project enquiry from ${data.name}`, from_name: 'thebloomglobal.com', replyto: data.email })
           });
           const result = await res.json().catch(() => ({}));
           if (!res.ok || String(result.success) !== 'true') throw new Error(result.message || res.status);
