@@ -1583,8 +1583,12 @@
       .brand-reveal-eyebrow { font-size: 10px; letter-spacing: 0.16em; margin-bottom: 26px; }
       .brand-reveal-subtext { font-size: 14px; letter-spacing: 0.02em; }
 
-      .manifesto { padding: 110px 22px 90px 22px; grid-template-columns: 1fr; gap: 40px; }
-      .manifesto-figure { max-width: 420px; }
+      .manifesto { padding: 80px 22px 48px 22px; grid-template-columns: 1fr; gap: 32px; }
+      .manifesto-text { margin-bottom: 0; }
+      /* phones: photos go landscape and crop to the lower part, where the people and lamps are,
+         so each takes about a third of the screen instead of more than half */
+      .manifesto-figure img,
+      .row-media.portrait img { aspect-ratio: 4 / 3; object-position: center 80%; }
       .manifesto-meta { grid-template-columns: 1fr; }
       .meta-item { padding: 20px 0 0 0; }
       .studio, .desks, .voices, .faq { padding: 70px 18px 80px 18px; }
@@ -1594,9 +1598,11 @@
       .faq-q { gap: 14px; padding: 22px 0; }
       .faq-a p { padding: 0 0 24px 0; }
       .section-head { margin-bottom: 40px; }
-      .studio .section-head { margin-bottom: 60px; }
-      .studio-rows { gap: 80px; }
-      .studio-row { grid-template-columns: 1fr; gap: 28px; }
+      .studio { padding-top: 56px; padding-bottom: 64px; }
+      .studio .section-head { margin-bottom: 40px; }
+      .studio-rows { gap: 64px; }
+      .studio-row { grid-template-columns: 1fr; gap: 22px; }
+      .studio-stats { padding: 0; }
       .studio-row.reverse .row-media { order: 0; }
       .row-media.portrait { max-width: none; }
       .dawn { padding: 110px 20px 130px 20px; }
@@ -2009,7 +2015,7 @@
       const heroOutro = document.getElementById('heroOutro');
       const brandCard = document.getElementById('brandCard');
 
-      // 151 WebP frames at the source's full 1920×1080; phones get a portrait 864×1080 centre crop
+      // 151 WebP frames at the source's full 1920×1080; phones get a portrait 864×1080 crop that eases right to follow the laptop screen
       const TOTAL_FRAMES = 151;
       const CALM_COVER = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const FRAME_DIR = window.innerWidth <= 768 ? 'assets/frames_mobile' : 'assets/frames_desktop';
