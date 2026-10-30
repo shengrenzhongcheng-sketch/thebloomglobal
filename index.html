@@ -360,6 +360,36 @@
 
     .hero-link:hover { color: #fff; border-color: #fff; }
 
+    /* Lets visitors leave the cover story at any point */
+    .skip-intro {
+      position: absolute;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      z-index: 20;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 0;
+      padding: 8px 4px;
+      font: 500 11px var(--font-sans);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(232, 236, 244, 0.6);
+      cursor: pointer;
+      pointer-events: auto;
+      transition: color 0.25s ease;
+    }
+
+    .skip-intro:hover, .skip-intro:focus-visible { color: #fff; }
+
+    /* Reduced motion: the cover becomes a single still, no scroll story */
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-track { height: 100vh; }
+      .skip-intro { display: none; }
+    }
+
     /* =========================================================
        STAGE 2: BRAND LOGO REVEAL (70% - 100% Scroll)
        ========================================================= */
@@ -764,7 +794,9 @@
 
     .stat-num {
       display: inline-block;
-      min-width: 1.75em;
+      /* exactly three digits wide, so the count-up never reflows or leaves a gap */
+      min-width: 3ch;
+      text-align: right;
       font-style: italic;
       color: var(--lamp);
       font-variant-numeric: tabular-nums;
@@ -925,412 +957,6 @@
       color: var(--ink-faint);
       margin-right: 10px;
     }
-
-    /* ---------- 5. Works wall (after dawn): curved perspective gallery of launched projects ---------- */
-    .works-wall {
-      height: 100svh;
-      min-height: 700px;
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-      /* the sunrise above flows down into the gallery */
-      background: linear-gradient(180deg, transparent 0%, rgba(8, 8, 10, 0.78) 22%, #060608 55%, #050505 100%);
-    }
-
-    .works-wall::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 5;
-      pointer-events: none;
-      background: linear-gradient(90deg, #050505 0, transparent 15%, transparent 85%, #050505 100%),
-                  linear-gradient(180deg, transparent 0, transparent 78%, rgba(0, 0, 0, 0.62));
-      /* side shading fades in, so the sunrise above has no hard edge */
-      mask-image: linear-gradient(180deg, transparent 0, #000 35%);
-      -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 35%);
-    }
-
-    .wall-intro {
-      padding: 40px 24px 0 24px;
-      margin-bottom: 0;
-    }
-
-    .wall-environment {
-      position: absolute;
-      inset: -23% -17% -38%;
-      perspective: 1500px;
-      perspective-origin: 50% 41%;
-      transform: translate3d(var(--mx, 0px), var(--my, 0px), 0);
-      transition: transform 0.25s ease-out;
-    }
-
-    .wall-surface {
-      position: absolute;
-      inset: 0;
-      transform: rotateX(5.5deg) rotateY(var(--tilt, 0deg)) scale(1.08);
-      transform-style: preserve-3d;
-      transform-origin: 50% 46%;
-      mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 92%, transparent 100%);
-      -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 92%, transparent 100%);
-    }
-
-    .wall-grid-lines {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      opacity: 0.72;
-    }
-
-    .wall-grid-lines path {
-      fill: none;
-      stroke: rgba(255, 255, 255, 0.19);
-      stroke-width: 1;
-      vector-effect: non-scaling-stroke;
-    }
-
-    .wall-grid-lines .horizon { stroke: rgba(255, 255, 255, 0.11); }
-
-    .wall-grid {
-      position: absolute;
-      /* sized so all three rows fit on one screen, below the navbar and above the controls */
-      inset: 21% 12% 29%;
-      overflow-y: auto;
-      scrollbar-width: none;
-      display: grid;
-      grid-template-columns: repeat(5, minmax(185px, 1fr));
-      grid-template-rows: repeat(3, minmax(0, 1fr));
-      perspective: 1200px;
-    }
-
-    .wall-grid::-webkit-scrollbar { display: none; }
-
-    .project-tile {
-      appearance: none;
-      border: 0;
-      border-radius: 0;
-      background: transparent;
-      color: inherit;
-      text-align: left;
-      font: inherit;
-      position: relative;
-      min-width: 0;
-      padding: 19px 16px 18px;
-      border-right: 1px solid rgba(255, 255, 255, 0.085);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      cursor: pointer;
-      isolation: isolate;
-      overflow: hidden;
-      transition: background 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .project-tile:nth-child(5n+1) { border-left: 1px solid rgba(255, 255, 255, 0.07); }
-
-    .project-tile::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.045), transparent 68%);
-      opacity: 0;
-      transition: opacity 0.45s;
-      z-index: -1;
-    }
-
-    .project-tile:hover::before,
-    .project-tile:focus-visible::before { opacity: 1; }
-
-    .project-tile:hover {
-      z-index: 3;
-      transform: translateZ(22px);
-      background: rgba(255, 255, 255, 0.025);
-    }
-
-    .project-tile.filtered-out { display: none; }
-
-    .tile-top,
-    .tile-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      color: #92928f;
-      font: 9px var(--font-mono);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
-
-    .tile-top .tags {
-      max-width: 75%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .tile-content {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      align-items: flex-start;
-      padding: 14px 0;
-    }
-
-    .tile-name {
-      font-size: clamp(13px, 1.1vw, 19px);
-      font-weight: 600;
-      letter-spacing: -0.03em;
-      line-height: 1.05;
-      color: #c4c4c0;
-      transition: color 0.3s;
-    }
-
-    .tile-type {
-      font: 9px var(--font-mono);
-      color: #757572;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .project-tile:hover .tile-name { color: #fff; }
-
-    .tile-image-wrap {
-      height: min(clamp(86px, 10vw, 150px), 11vh);
-      width: var(--img-width, 94%);
-      margin: auto;
-      overflow: hidden;
-      background: #131313;
-      transform: perspective(800px) rotateY(var(--image-tilt, 0deg)) rotateZ(var(--image-rotate, 0deg));
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .tile-image {
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: cover;
-      filter: saturate(0.83) brightness(0.88);
-      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s;
-    }
-
-    .project-tile:hover .tile-image { transform: scale(1.055); filter: saturate(1) brightness(1); }
-    .project-tile:nth-child(3n+1) .tile-image-wrap { height: min(clamp(74px, 8vw, 118px), 9vh); --img-width: 77%; }
-    .project-tile:nth-child(4n+2) .tile-image-wrap { height: min(clamp(106px, 12vw, 168px), 12.5vh); --img-width: 100%; }
-    .project-tile:nth-child(5n+3) .tile-image-wrap { height: min(clamp(90px, 9vw, 132px), 10vh); --img-width: 69%; --image-rotate: -1.5deg; }
-
-    .tile-bottom { margin-top: 12px; }
-    .tile-bottom .open-mark { font-size: 14px; transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s; }
-    .project-tile:hover .open-mark { transform: translate(2px, -2px); color: var(--leaf); }
-
-    .wall-cursor {
-      position: fixed;
-      z-index: 100;
-      left: 0;
-      top: 0;
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: var(--leaf);
-      color: #0b1a0e;
-      display: grid;
-      place-items: center;
-      font: 10px var(--font-mono);
-      pointer-events: none;
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.7);
-      transition: opacity 0.2s, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .wall-cursor.is-visible { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-
-    .wall-label {
-      position: absolute;
-      left: 3vw;
-      bottom: 34px;
-      z-index: 8;
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      font: 10px var(--font-mono);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: #888;
-    }
-
-    .wall-label::before { content: ''; width: 25px; height: 1px; background: var(--leaf); }
-
-    .wall-controls {
-      position: absolute;
-      z-index: 9;
-      left: 50%;
-      bottom: 22px;
-      transform: translateX(-50%);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .control-cluster {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      padding: 5px;
-      background: rgba(42, 42, 42, 0.84);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 99px;
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-    }
-
-    .icon-button {
-      width: 38px;
-      height: 38px;
-      border: 0;
-      border-radius: 50%;
-      background: transparent;
-      color: #bbb;
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      transition: background 0.25s, color 0.25s;
-    }
-
-    .icon-button[aria-pressed="true"] { background: #f4f3f0; color: #0a0a0a; }
-    .icon-button svg { width: 17px; height: 17px; }
-
-    .filter-button {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 0 20px;
-      height: 48px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 99px;
-      background: rgba(42, 42, 42, 0.84);
-      color: #eee;
-      font-size: 13px;
-      cursor: pointer;
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      transition: background 0.25s, color 0.25s;
-    }
-
-    .filter-button:hover { background: #f4f3f0; color: #080808; }
-    .filter-count { font: 10px var(--font-mono); opacity: 0.7; }
-
-    .wall-count {
-      position: absolute;
-      right: 3vw;
-      bottom: 37px;
-      z-index: 8;
-      font: 10px var(--font-mono);
-      color: #8a8a86;
-    }
-
-    .wall-count strong { color: #f4f2ee; font-weight: 400; }
-
-    .filter-popover {
-      position: absolute;
-      z-index: 10;
-      left: 50%;
-      bottom: 84px;
-      width: min(290px, calc(100vw - 32px));
-      padding: 22px;
-      background: rgba(15, 15, 15, 0.96);
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.48);
-      opacity: 0;
-      visibility: hidden;
-      transform: translate(-50%, 10px);
-      transition: opacity 0.25s, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.25s;
-    }
-
-    .filter-popover.open { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
-
-    .filter-popover h3 {
-      margin: 0 0 16px;
-      font: 10px var(--font-mono);
-      letter-spacing: 0.1em;
-      color: #aaa;
-      text-transform: uppercase;
-    }
-
-    .filter-options { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-
-    .filter-option {
-      padding: 10px 9px;
-      border: 0;
-      background: transparent;
-      text-align: left;
-      color: #8b8b87;
-      font: 10px var(--font-mono);
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    .filter-option:hover,
-    .filter-option[aria-pressed="true"] { color: #0b1a0e; background: var(--leaf); }
-
-    .works-wall.view-list .wall-grid { grid-template-columns: repeat(2, minmax(260px, 1fr)); grid-template-rows: auto; }
-    .works-wall.view-list .project-tile { min-height: 230px; }
-    .works-wall.view-list .project-tile .tile-image-wrap { width: 55%; height: 120px; }
-
-    /* Project detail */
-    .project-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 120;
-      display: grid;
-      place-items: center;
-      padding: 30px;
-      background: rgba(0, 0, 0, 0.82);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.35s, visibility 0.35s;
-    }
-
-    .project-modal.open { opacity: 1; visibility: visible; }
-
-    .modal-card {
-      position: relative;
-      width: min(960px, 100%);
-      max-height: 90vh;
-      overflow: auto;
-      background: #101010;
-      border: 1px solid rgba(255, 255, 255, 0.13);
-      color: var(--ink);
-      transform: translateY(18px) scale(0.985);
-      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .project-modal.open .modal-card { transform: none; }
-
-    .modal-image { display: block; width: 100%; height: min(50vh, 450px); object-fit: cover; filter: brightness(0.88); }
-    .modal-body { display: grid; grid-template-columns: 1fr auto; gap: 20px; padding: 30px; }
-    .modal-body h2 { margin: 0 0 8px; font-family: var(--font-serif); font-size: clamp(35.8px, 5.6vw, 62.7px); font-weight: 400; letter-spacing: -0.03em; }
-    .modal-body p { max-width: 600px; margin: 0; color: #aaa; font-size: 15px; line-height: 1.7; }
-    .modal-meta { font: 10px var(--font-mono); color: #888; text-transform: uppercase; }
-
-    .modal-close {
-      position: absolute;
-      z-index: 2;
-      right: 14px;
-      top: 14px;
-      width: 42px;
-      height: 42px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.55);
-      color: #fff;
-      cursor: pointer;
-      font-size: 20px;
-    }
-
-    .modal-close:hover { background: #fff; color: #111; }
 
     /* ---------- 6. Voices: editorial layout, client list on the left, quote on the right ---------- */
     .voices {
@@ -1633,8 +1259,141 @@
     .dawn-actions {
       display: flex;
       justify-content: center;
-      gap: 14px;
+      align-items: center;
+      gap: 32px;
       flex-wrap: wrap;
+    }
+
+    /* ---------- Contact form dialog: night sky with a desk-lamp glow, like the studio ---------- */
+    .contact-dialog {
+      /* the global margin reset would otherwise pin the dialog to the top-left */
+      margin: auto;
+      width: min(540px, calc(100% - 32px));
+      max-height: calc(100dvh - 32px);
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 22px;
+      background:
+        radial-gradient(120% 60% at 50% -10%, rgba(245, 199, 126, 0.16), transparent 60%),
+        linear-gradient(180deg, #121c33 0%, #0b1324 100%);
+      color: #e8ecf4;
+      box-shadow: 0 40px 90px -20px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      overflow: auto;
+    }
+
+    .contact-dialog::backdrop {
+      background: rgba(5, 9, 18, 0.7);
+      backdrop-filter: blur(6px);
+    }
+
+    .contact-card { position: relative; padding: 36px 36px 28px; }
+
+    .contact-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 50%;
+      background: none;
+      color: #e8ecf4;
+      font-size: 19px;
+      cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .contact-close:hover { background: #e8ecf4; color: #0b1324; }
+
+    .contact-eyebrow {
+      font: 600 11px var(--font-sans);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #f5c77e;
+    }
+
+    .contact-title {
+      margin: 8px 0 22px;
+      font-family: var(--font-serif);
+      font-size: clamp(30px, 4.6vw, 38px);
+      font-weight: 500;
+      line-height: 1.1;
+    }
+
+    .contact-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .contact-field { display: block; margin-bottom: 14px; }
+
+    .contact-field > span,
+    .contact-choice legend {
+      display: block;
+      margin-bottom: 7px;
+      font: 500 12px var(--font-sans);
+      letter-spacing: 0.04em;
+      color: rgba(232, 236, 244, 0.6);
+    }
+
+    .contact-field input,
+    .contact-field textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.035);
+      color: #e8ecf4;
+      font: 15px/1.5 var(--font-sans);
+      resize: vertical;
+      transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .contact-field textarea::placeholder { color: rgba(232, 236, 244, 0.3); }
+
+    /* focus lights the field like a lamp */
+    .contact-field input:focus,
+    .contact-field textarea:focus {
+      outline: none;
+      border-color: rgba(245, 199, 126, 0.65);
+      background: rgba(245, 199, 126, 0.05);
+      box-shadow: 0 0 0 4px rgba(245, 199, 126, 0.08);
+    }
+
+    .contact-field.invalid input,
+    .contact-field.invalid textarea { border-color: #e98a6f; }
+
+    .contact-choice { margin: 0 0 14px; padding: 0; border: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+    .contact-choice legend { width: 100%; padding: 0; }
+    .contact-choice label { cursor: pointer; }
+    .contact-choice input { position: absolute; opacity: 0; pointer-events: none; }
+
+    .contact-choice span {
+      display: inline-block;
+      padding: 8px 15px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--pill-radius);
+      font: 500 13px var(--font-sans);
+      color: rgba(232, 236, 244, 0.72);
+      transition: all 0.2s ease;
+    }
+
+    .contact-choice span:hover { border-color: rgba(255, 255, 255, 0.28); }
+    .contact-choice input:checked + span { background: rgba(245, 199, 126, 0.14); border-color: rgba(245, 199, 126, 0.7); color: #f5c77e; }
+    .contact-choice input:focus-visible + span { outline: 2px solid #f5c77e; outline-offset: 2px; }
+
+    .contact-honey { position: absolute; left: -9999px; width: 1px; height: 1px; }
+
+    .contact-submit { width: 100%; margin-top: 6px; padding: 13px 26px; }
+    .contact-submit:disabled { opacity: 0.6; cursor: wait; transform: none; }
+
+    .contact-status { min-height: 1.4em; margin-top: 10px; font: 13px/1.5 var(--font-sans); color: #e98a6f; text-align: center; }
+
+    .contact-done { display: none; padding: 18px 0 8px; }
+    .contact-done p { margin: -8px 0 26px; color: rgba(232, 236, 244, 0.7); font: 15px/1.7 var(--font-sans); }
+    .contact-dialog.is-sent .contact-form { display: none; }
+    .contact-dialog.is-sent .contact-done { display: block; }
+
+    @media (max-width: 768px) {
+      .contact-card { padding: 34px 20px 22px; }
+      .contact-row { grid-template-columns: 1fr; gap: 0; }
     }
 
     /* ---------- 8. Footer ---------- */
@@ -1723,23 +1482,13 @@
 
     .footer-top-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.12); }
 
-    /* ---------- After dawn: the sunrise settles into a warm deep brown for FAQ, works and footer ---------- */
+    /* ---------- After dawn: the sunrise settles into a warm deep brown for FAQ and footer ---------- */
     .after-dawn {
       position: relative;
       z-index: 1;
       background: linear-gradient(180deg, transparent 0, rgba(46, 33, 28, 0.6) 220px, rgba(38, 29, 25, 0.94) 520px, #241b18 760px, #1e1714 100%);
     }
 
-    .after-dawn .works-wall { background: transparent; }
-    .after-dawn .works-wall::before {
-      background: linear-gradient(90deg, #211915 0, transparent 15%, transparent 85%, #211915 100%),
-                  linear-gradient(180deg, transparent 0, transparent 78%, rgba(20, 14, 12, 0.55));
-    }
-    .after-dawn .tile-image-wrap { background: #2c221e; }
-    .after-dawn .control-cluster,
-    .after-dawn .filter-button { background: rgba(58, 44, 38, 0.88); border-color: rgba(255, 236, 220, 0.1); }
-    .after-dawn .filter-button:hover { background: #f4ebe2; color: #241b18; }
-    .after-dawn .filter-popover { background: rgba(36, 27, 24, 0.97); border-color: rgba(255, 236, 220, 0.12); }
 
     /* ---------- Reveal on scroll ---------- */
     .reveal {
@@ -1785,9 +1534,6 @@
       .hero-intro { padding: 0 48px 80px 48px; }
 
       .studio, .desks, .voices, .faq { padding-left: 32px; padding-right: 32px; }
-      .wall-environment { inset: -17% -45% -26%; perspective: 1700px; }
-      .wall-surface { transform: rotateX(4deg) rotateY(var(--tilt, 0deg)) scale(1.06); }
-      .wall-grid { inset: 13% 20% 17%; grid-template-columns: repeat(3, minmax(175px, 1fr)); grid-template-rows: repeat(3, minmax(220px, 1fr)); }
       .desk-grid { grid-template-columns: 1fr; max-width: 640px; margin: 0 auto; }
       .step-arrow { justify-self: center; transform: rotate(90deg); }
       .studio-row { gap: 56px; }
@@ -1839,24 +1585,6 @@
       .voice-tabs { display: none; }
       .faq-q { gap: 14px; padding: 22px 0; }
       .faq-a p { padding: 0 0 24px 0; }
-      .works-wall { min-height: 640px; }
-      .wall-environment { inset: 0; perspective: none; transform: none; transition: none; }
-      .wall-surface { inset: 0; transform: none; }
-      .wall-grid-lines { display: none; }
-      .wall-grid { inset: 12% 4% 14%; display: flex; flex-direction: column; overscroll-behavior: contain; }
-      .project-tile { flex-shrink: 0; min-height: 190px; padding: 14px 14px 13px; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr auto; border-left: 1px solid rgba(255, 255, 255, 0.07); }
-      .project-tile:hover { transform: none; }
-      .tile-top { grid-column: 1 / -1; align-self: start; }
-      .tile-content { grid-column: 1; grid-row: 2; align-self: end; padding: 0 0 3px; }
-      .project-tile .tile-image-wrap,
-      .works-wall.view-list .project-tile .tile-image-wrap { grid-column: 2; grid-row: 2; width: 100%; height: 96px; align-self: end; margin: 0; }
-      .tile-bottom { display: none; }
-      .wall-label, .wall-count { display: none; }
-      .wall-controls { bottom: 16px; }
-      .filter-popover { bottom: 76px; }
-      .modal-body { grid-template-columns: 1fr; padding: 22px; }
-      .modal-meta { order: -1; }
-      .modal-image { height: 38vh; }
       .section-head { margin-bottom: 40px; }
       .studio .section-head { margin-bottom: 60px; }
       .studio-rows { gap: 80px; }
@@ -1882,7 +1610,6 @@
       <li><a href="#overview">About</a></li>
       <li><a href="#studio">Studio</a></li>
       <li><a href="#capabilities">Process</a></li>
-      <li><a href="#work">Works</a></li>
     </ul>
 
     <div class="nav-actions">
@@ -1911,7 +1638,7 @@
       <!-- Dynamic Stage Content -->
       <main class="stage-content">
 
-        <!-- STAGE 1: INTRO COVER (0% - 25% Scroll) -->
+        <!-- STAGE 1: INTRO COVER (holds to 6%, gone by 18%) -->
         <section class="hero-intro" id="heroIntro">
           <div class="hero-eyebrow">Digital Craft &amp; Experience Design</div>
 
@@ -1936,7 +1663,7 @@
           </div>
         </section>
 
-        <!-- STAGE 2: BRAND LOGO REVEAL (70% - 100% Scroll) -->
+        <!-- STAGE 2: BRAND LOGO REVEAL (74% - 90%, then holds) -->
         <section class="hero-outro" id="heroOutro">
           <div class="brand-reveal-backdrop"><canvas id="outroStars" aria-hidden="true"></canvas></div>
           <div class="brand-reveal-card" id="brandCard">
@@ -1953,6 +1680,14 @@
         </section>
 
       </main>
+
+      <button class="skip-intro" id="skipIntro" onclick="scrollToContent()">
+        Skip intro
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+      </button>
 
     </div>
   </div>
@@ -2014,7 +1749,7 @@
 
         <!-- a pause between the two photo rows: one sentence, its number counts up -->
         <div class="studio-stats">
-          <p class="stat-line">We’ve helped <span class="stat-num" data-count="534">0</span> people bring their ideas to life on the web.</p>
+          <p class="stat-line">We’ve helped <span class="stat-num" data-count="247">0</span> people bring their ideas to life on the web.</p>
         </div>
 
         <div class="studio-row reverse">
@@ -2137,14 +1872,13 @@
       <h2 class="dawn-title">The sun is rising.<br><em>Let your site bloom.</em></h2>
       <p class="section-lead">Tell us about your idea. We’ll read every word and reply soon.</p>
       <div class="dawn-actions">
-        <a href="mailto:hello@webbloom.design" class="btn-pill btn-pill-accent">
+        <button type="button" class="btn-pill btn-pill-accent" data-contact>
           Schedule a Consultation
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <line x1="5" y1="12" x2="19" y2="12"></line>
             <polyline points="12 5 19 12 12 19"></polyline>
           </svg>
-        </a>
-        <button class="btn-pill btn-pill-glass" onclick="scrollToMilestone(0)">Back to the Stars ↺</button>
+        </button>
       </div>
     </section>
 
@@ -2181,36 +1915,7 @@
       </div>
     </section>
 
-    <!-- 9. WORKS WALL: after dawn, everything that has launched -->
-    <section class="works-block" id="work" aria-label="Selected work">
-      <div class="section-head wall-intro">
-        <span class="eyebrow">Selected Works</span>
-        <h2 class="section-title">Already <em>live</em></h2>
-      </div>
-      <div class="works-wall" id="worksWall">
-      <div class="wall-environment" id="wallEnvironment">
-        <div class="wall-surface">
-          <svg class="wall-grid-lines" viewBox="0 0 1600 1000" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M0 190 Q800 255 1600 190"/><path d="M0 430 Q800 465 1600 430"/><path d="M0 690 Q800 675 1600 690"/><path d="M0 900 Q800 820 1600 900"/>
-            <path d="M155 0 Q90 500 155 1000"/><path d="M410 0 Q355 500 410 1000"/><path d="M680 0 Q655 500 680 1000"/><path d="M920 0 Q945 500 920 1000"/><path d="M1190 0 Q1240 500 1190 1000"/><path d="M1450 0 Q1510 500 1450 1000"/>
-            <path class="horizon" d="M0 76 Q800 130 1600 76"/><path class="horizon" d="M0 980 Q800 865 1600 980"/>
-          </svg>
-          <div class="wall-grid" id="projectGrid" aria-label="Projects"></div>
-        </div>
-      </div>
-      <div class="wall-label">Selected work / 2022—26</div>
-      <div class="wall-controls">
-        <div class="control-cluster" aria-label="View">
-          <button class="icon-button" id="gridView" type="button" aria-label="Grid view" aria-pressed="true"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="2.5" y="2.5" width="6" height="6" stroke="currentColor"/><rect x="11.5" y="2.5" width="6" height="6" stroke="currentColor"/><rect x="2.5" y="11.5" width="6" height="6" stroke="currentColor"/><rect x="11.5" y="11.5" width="6" height="6" stroke="currentColor"/></svg></button>
-          <button class="icon-button" id="listView" type="button" aria-label="List view" aria-pressed="false"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 5h2m3 0h9M3 10h2m3 0h9M3 15h2m3 0h9" stroke="currentColor" stroke-width="1.2"/></svg></button>
-        </div>
-        <button class="filter-button" id="filterButton" type="button" aria-expanded="false" aria-controls="filterPopover">Filter <span class="filter-count" id="filterCount">15</span></button>
-      </div>
-      <aside class="filter-popover" id="filterPopover" aria-label="Filter projects"><h3>Filter projects</h3><div class="filter-options" id="filterOptions"></div></aside>
-      <div class="wall-count"><strong id="projectCount">15</strong> / <span id="totalProjects">15</span> projects</div>
-      </div>
-    </section>
-    <!-- 10. FOOTER -->
+    <!-- 9. FOOTER -->
     <footer class="site-footer">
       <div class="footer-top-row">
         <div class="footer-brand-col">
@@ -2224,14 +1929,13 @@
               <li><a href="#overview">About</a></li>
               <li><a href="#studio">Studio</a></li>
               <li><a href="#capabilities">Process</a></li>
-              <li><a href="#work">Works</a></li>
             </ul>
           </div>
           <div>
             <div class="footer-col-title">Contact</div>
             <ul class="footer-links-list">
               <li><a href="#contact">Start a project</a></li>
-              <li><a href="mailto:hello@webbloom.design">Email</a></li>
+              <li><a href="#" data-contact>Send a message</a></li>
             </ul>
           </div>
         </div>
@@ -2246,17 +1950,46 @@
 
   </div>
 
-  <div class="wall-cursor" id="wallCursor" aria-hidden="true">VIEW ↗</div>
-  <div class="project-modal" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true">
-    <article class="modal-card">
-      <button class="modal-close" id="modalClose" type="button" aria-label="Close">×</button>
-      <img class="modal-image" id="modalImage" src="" alt="">
-      <div class="modal-body">
-        <div><h2 id="modalTitle"></h2><p id="modalDescription"></p></div>
-        <div class="modal-meta" id="modalMeta"></div>
+  <!-- Contact form: opened by "Schedule a Consultation" and the footer link -->
+  <dialog class="contact-dialog" id="contactDialog" aria-labelledby="contactTitle">
+    <div class="contact-card">
+      <button class="contact-close" id="contactClose" type="button" aria-label="Close">×</button>
+      <form class="contact-form" id="contactForm" novalidate>
+        <span class="contact-eyebrow">Start a project</span>
+        <h2 class="contact-title" id="contactTitle">Tell us about your idea</h2>
+        <div class="contact-row">
+          <label class="contact-field">
+            <span>Name</span>
+            <input name="name" type="text" autocomplete="name" required maxlength="100">
+          </label>
+          <label class="contact-field">
+            <span>Email</span>
+            <input name="email" type="email" autocomplete="email" required maxlength="200">
+          </label>
+        </div>
+        <fieldset class="contact-choice">
+          <legend>Website type</legend>
+          <label><input type="radio" name="package" value="Standard website ($150)" checked><span>Standard · $150</span></label>
+          <label><input type="radio" name="package" value="Interactive website ($300)"><span>Interactive · $300</span></label>
+          <label><input type="radio" name="package" value="Not sure yet"><span>Not sure yet</span></label>
+        </fieldset>
+        <label class="contact-field">
+          <span>Your idea</span>
+          <textarea name="message" rows="3" required maxlength="4000" placeholder="What is the site for, and is there anything you already have in mind?"></textarea>
+        </label>
+        <!-- left empty by people; bots that fill it are dropped -->
+        <input class="contact-honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button class="btn-pill btn-pill-accent contact-submit" id="contactSubmit" type="submit">Send message</button>
+        <p class="contact-status" id="contactStatus" role="status" aria-live="polite"></p>
+      </form>
+      <div class="contact-done" id="contactDone">
+        <span class="contact-eyebrow">Message sent</span>
+        <h2 class="contact-title">Thank you.</h2>
+        <p>We’ve received your message and will reply to your email soon.</p>
+        <button class="btn-pill btn-pill-accent" type="button" id="contactDoneClose">Close</button>
       </div>
-    </article>
-  </div>
+    </div>
+  </dialog>
 
   <!-- High-Performance Canvas Engine (Pure Scroll-Scrubbed) -->
   <script>
@@ -2268,8 +2001,9 @@
       const heroOutro = document.getElementById('heroOutro');
       const brandCard = document.getElementById('brandCard');
 
-      // 151 compressed WebP frames; phones get a smaller 960px set
+      // 151 WebP frames at the source's full 1920×1080; phones get a portrait 864×1080 centre crop
       const TOTAL_FRAMES = 151;
+      const CALM_COVER = matchMedia('(prefers-reduced-motion: reduce)').matches;
       const FRAME_DIR = window.innerWidth <= 768 ? 'assets/frames_mobile' : 'assets/frames_desktop';
       const images = new Array(TOTAL_FRAMES);
       let lastDrawnIndex = 0;
@@ -2285,23 +2019,31 @@
       }
       if (!queued.has(TOTAL_FRAMES - 1)) loadOrder.splice(1, 0, TOTAL_FRAMES - 1);
 
+      // Reduced motion: no scrubbing, so only the opening still is needed
+      if (CALM_COVER) loadOrder.length = 1;
+
       const MAX_PARALLEL = 6;
       let nextToLoad = 0;
-      function loadNext() {
-        if (nextToLoad >= loadOrder.length) return;
-        const index = loadOrder[nextToLoad++];
+      let inFlight = 0;
+      function startLoad(index) {
+        if (images[index]) return;
+        inFlight++;
         const img = new Image();
         img.decoding = 'async';
-        const done = () => {
-          if (index === lastDrawnIndex || index === 0) renderFrame(lastDrawnIndex);
-          loadNext();
+        const finish = (ok) => {
+          inFlight--;
+          if (ok && (index === lastDrawnIndex || index === 0)) renderFrame(lastDrawnIndex);
+          pump();
         };
-        img.onload = done;
-        img.onerror = loadNext;
+        img.onload = () => finish(true);
+        img.onerror = () => finish(false);
         img.src = `${FRAME_DIR}/f_${String(index + 1).padStart(3, '0')}.webp`;
         images[index] = img;
       }
-      for (let i = 0; i < MAX_PARALLEL; i++) loadNext();
+      function pump() {
+        while (inFlight < MAX_PARALLEL && nextToLoad < loadOrder.length) startLoad(loadOrder[nextToLoad++]);
+      }
+      pump();
 
       // Resize canvas for sharp Retina / HiDPI display
       function resizeCanvas() {
@@ -2321,6 +2063,8 @@
         lastDrawnIndex = index;
         const img = images[index];
         if (!img || !img.complete || img.naturalWidth === 0) {
+          // The frame being asked for jumps the queue (e.g. landing mid-cover)
+          if (!CALM_COVER && !img && inFlight < MAX_PARALLEL + 2) startLoad(index);
           // Frame not loaded yet: show the nearest one that is
           for (let offset = 1; offset < TOTAL_FRAMES; offset++) {
             for (const fallback of [images[index - offset], images[index + offset]]) {
@@ -2357,18 +2101,37 @@
         ctx.drawImage(img, dx, dy, dw, dh);
       }
 
+      // Piecewise scroll timeline: [cover scroll progress, video progress].
+      // Flat segments hold a frame — the opening still while the title is read,
+      // the final frame before the brand reveal covers it.
+      const TIMELINE = [[0, 0], [0.08, 0], [0.78, 1], [1, 1]];
+      function frameAt(p) {
+        for (let i = 1; i < TIMELINE.length; i++) {
+          const [p0, v0] = TIMELINE[i - 1];
+          const [p1, v1] = TIMELINE[i];
+          if (p <= p1) {
+            const t = p1 > p0 ? (p - p0) / (p1 - p0) : 1;
+            // Half linear, half smoothstep: motion eases in and out of the holds
+            const eased = 0.5 * t + 0.5 * t * t * (3 - 2 * t);
+            return Math.round((v0 + (v1 - v0) * eased) * (TOTAL_FRAMES - 1));
+          }
+        }
+        return TOTAL_FRAMES - 1;
+      }
+
       // Smooth scroll state
       let targetProgress = 0;
       let currentProgress = 0;
 
       const navbar = document.getElementById('navbar');
+      const skipIntro = document.getElementById('skipIntro');
       const viewportStage = document.getElementById('viewportStage');
 
       function updateScrollFraction() {
-        const totalScroll = scrollTrack.offsetHeight - window.innerHeight;
-        if (totalScroll <= 0) return;
+        // Zero when the cover is a single still (reduced motion)
+        const totalScroll = Math.max(scrollTrack.offsetHeight - window.innerHeight, 0);
         const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-        targetProgress = Math.min(Math.max(scrollY / totalScroll, 0), 1);
+        targetProgress = totalScroll ? Math.min(Math.max(scrollY / totalScroll, 0), 1) : 0;
 
         // While scrolling cover (0% - 100%): perfectly pinned fullscreen
         // When scrolling past cover into page content: smoothly translates up
@@ -2400,32 +2163,29 @@
           currentProgress = targetProgress;
         }
 
-        // Frame index strictly determined by scroll progress
-        const targetFrameIndex = Math.min(
-          Math.max(Math.round(currentProgress * (TOTAL_FRAMES - 1)), 0),
-          TOTAL_FRAMES - 1
-        );
+        renderFrame(frameAt(currentProgress));
 
-        renderFrame(targetFrameIndex);
+        // 3. Stage 1: intro copy holds while it can be read, then fades (6% ~ 18%)
+        const introNorm = Math.min(1, Math.max(0, (currentProgress - 0.06) / (0.18 - 0.06)));
+        const introOpacity = 1 - introNorm;
+        heroIntro.style.opacity = introOpacity;
+        heroIntro.style.transform = `translateY(${-introNorm * 36}px)`;
+        heroIntro.style.pointerEvents = introOpacity > 0.1 ? 'auto' : 'none';
+        // Faded buttons leave the keyboard order too
+        const introHidden = introOpacity <= 0.1;
+        if (heroIntro.inert !== introHidden) heroIntro.inert = introHidden;
 
-        // 3. Stage 1: Intro Cover Transition (0% ~ 22%)
-        const introFadeEnd = 0.22;
-        if (currentProgress <= introFadeEnd) {
-          const introNorm = currentProgress / introFadeEnd;
-          const introOpacity = Math.max(0, 1 - introNorm);
-          const introTranslate = -introNorm * 36;
-          heroIntro.style.opacity = introOpacity;
-          heroIntro.style.transform = `translateY(${introTranslate}px)`;
-          heroIntro.style.pointerEvents = introOpacity > 0.1 ? 'auto' : 'none';
-        } else {
-          heroIntro.style.opacity = '0';
-          heroIntro.style.pointerEvents = 'none';
+        if (skipIntro) {
+          const skipOpacity = Math.min(1, Math.max(0, (0.74 - currentProgress) / 0.06));
+          skipIntro.style.opacity = skipOpacity;
+          skipIntro.style.pointerEvents = skipOpacity > 0.4 ? 'auto' : 'none';
+          if (skipIntro.inert !== (skipOpacity <= 0.4)) skipIntro.inert = skipOpacity <= 0.4;
         }
 
-        // 4. Stage 2: Outro Brand Logo Reveal (65% ~ 100%)
-        const outroStart = 0.65;
+        // 4. Stage 2: brand reveal after the final frame has had a moment (74% ~ 90%, then holds)
+        const outroStart = 0.74;
         if (currentProgress >= outroStart) {
-          const outroNorm = Math.min(1, Math.max(0, (currentProgress - outroStart) / (0.88 - outroStart)));
+          const outroNorm = Math.min(1, Math.max(0, (currentProgress - outroStart) / (0.90 - outroStart)));
           const outroOpacity = outroNorm;
           const outroTranslate = (1 - outroOpacity) * 20;
           const outroScale = 0.94 + outroOpacity * 0.06;
@@ -2490,7 +2250,7 @@
     })();
   </script>
 
-  <!-- Night Studio interactions: sky, manifesto, voices, FAQ, works wall -->
+  <!-- Night Studio interactions: sky, manifesto, voices, FAQ -->
   <script>
     (function() {
       const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2634,125 +2394,59 @@
         });
       }));
 
-      // ---------- Works wall (ported from the FORME studio site) ----------
-      const projects = [
-        {slug:"nami-house",name:"Nami House",title:"A slower kind of escape",year:"2026",category:"Hotel",tags:["Hospitality","Website"],client:"Nami House",description:"A quiet digital welcome for a coastal retreat, balancing useful booking details with the feeling of arriving somewhere else.",image:"https://images.unsplash.com/photo-1594433575301-cf59b8ada6b1?auto=format&fit=crop&w=1000&q=82",alt:"Tropical resort pool surrounded by palms"},
-        {slug:"sunday-table",name:"Sunday Table",title:"Food with a point of view",year:"2026",category:"Restaurant",tags:["Restaurant","Identity"],client:"Sunday Table",description:"A warm, editorial home for a neighbourhood restaurant built around seasonal ingredients and long lunches.",image:"https://images.unsplash.com/photo-1685040235380-a42a129ade4e?auto=format&fit=crop&w=1000&q=82",alt:"Sunlit contemporary restaurant interior"},
-        {slug:"form-and-field",name:"Form & Field",title:"Objects for living well",year:"2025",category:"E-commerce",tags:["E-commerce","Objects"],client:"Form & Field",description:"An understated storefront that gives considered furniture and everyday objects the room they deserve.",image:"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1000&q=82",alt:"Sculptural contemporary furniture and warm interior"},
-        {slug:"luma-skin",name:"Luma Skin",title:"A daily ritual, reimagined",year:"2025",category:"Beauty",tags:["Beauty","E-commerce"],client:"Luma Skin",description:"A clean, tactile product experience for a small-batch skincare line inspired by botanical rituals.",image:"https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1000&q=82",alt:"Minimal skincare bottles arranged in soft light"},
-        {slug:"monolith",name:"Monolith",title:"Quiet strength in every line",year:"2024",category:"Real Estate",tags:["Architecture","Website"],client:"Monolith Studio",description:"A portfolio site for an architecture practice, translating material restraint into a clear digital language.",image:"https://images.unsplash.com/photo-1746911779503-f16ee2088257?auto=format&fit=crop&w=1000&q=82",alt:"Geometric concrete architecture in late afternoon light"},
-        {slug:"common-ground",name:"Common Ground",title:"A place to come together",year:"2024",category:"Corporate",tags:["Community","Platform"],client:"Common Ground",description:"A welcoming online hub for a shared workspace, with a simple path from discovering a space to joining it.",image:"https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=82",alt:"Light-filled shared creative studio"},
-        {slug:"studio-edo",name:"Studio Edo",title:"A practice in contrast",year:"2023",category:"Portfolio",tags:["Portfolio","Identity"],client:"Studio Edo",description:"A compact portfolio that lets material, image and typography express an independent creative practice.",image:"https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=1000&q=82",alt:"Contemporary installation in a dark gallery"},
-        {slug:"citrus-club",name:"Citrus Club",title:"Bright ideas, simply served",year:"2023",category:"Experimental",tags:["Experimental","Digital"],client:"Citrus Club",description:"An expressive digital campaign for a playful new take on fresh food and everyday wellbeing.",image:"https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&w=1000&q=82",alt:"Bright citrus fruit arranged against a natural backdrop"},
-        {slug:"serein",name:"Serein",title:"The art of slowing down",year:"2026",category:"Hotel",tags:["Hospitality","Digital"],client:"Serein Retreat",description:"A calm, image-led digital home for a place to pause, reset and reconnect with the landscape.",image:"https://images.unsplash.com/photo-1726397461856-1c6f801746ef?auto=format&fit=crop&w=1000&q=82",alt:"Palm-framed resort pool under open sky"},
-        {slug:"atelier-brut",name:"Atelier Brut",title:"Built around the essential",year:"2025",category:"Real Estate",tags:["Architecture","Portfolio"],client:"Atelier Brut",description:"A focused digital portfolio for an architecture studio drawn to strong forms and honest materials.",image:"https://images.unsplash.com/photo-1736805049006-0fdfcc1e719e?auto=format&fit=crop&w=1000&q=82",alt:"Concrete architecture with deep horizontal lines"},
-        {slug:"soft-form",name:"Soft Form",title:"Clothes made to keep",year:"2024",category:"E-commerce",tags:["Fashion","E-commerce"],client:"Soft Form",description:"A refined shopfront for thoughtful wardrobe staples, with a visual language built around texture and silhouette.",image:"https://images.unsplash.com/photo-1613728455120-d00493b5e77e?auto=format&fit=crop&w=1000&q=82",alt:"Dark garment arranged as an editorial still life"},
-        {slug:"still-studio",name:"Still Studio",title:"A study in material",year:"2023",category:"Portfolio",tags:["Studio","Website"],client:"Still Studio",description:"A restrained, image-first portfolio for a multidisciplinary practice working across space and objects.",image:"https://images.unsplash.com/photo-1593043799402-4365e10524b8?auto=format&fit=crop&w=1000&q=82",alt:"Monochrome study of sculptural concrete architecture"},
-        {slug:"onda-coffee",name:"Onda Coffee",title:"A brighter daily ritual",year:"2025",category:"Restaurant",tags:["Food","Identity"],client:"Onda Coffee",description:"A lively identity and digital home for a neighbourhood coffee bar built around good light, careful sourcing and a welcoming counter.",image:"https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1000&q=82",alt:"Warm independent coffee shop interior"},
-        {slug:"atelier-no-7",name:"Atelier No. 7",title:"Made for the long run",year:"2024",category:"E-commerce",tags:["Fashion","E-commerce"],client:"Atelier No. 7",description:"A considered storefront for everyday clothing, pairing tactile photography with a straightforward shopping experience.",image:"https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1000&q=82",alt:"Fashion editorial with models walking through a city"},
-        {slug:"field-notes",name:"Field Notes",title:"A studio in the open",year:"2023",category:"Portfolio",tags:["Studio","Identity"],client:"Field Notes Studio",description:"A flexible portfolio for a small creative studio, bringing its identity, selected work and process into one clear place.",image:"https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=82",alt:"Minimal creative studio with shared desks"},
-      ];
-      const categories = ['All', ...new Set(projects.map(p => p.category))];
-      const wallStage = document.getElementById('worksWall');
-      const wallEnv = document.getElementById('wallEnvironment');
-      const projectGrid = document.getElementById('projectGrid');
-      const wallCursor = document.getElementById('wallCursor');
-      const filterButton = document.getElementById('filterButton');
-      const filterPopover = document.getElementById('filterPopover');
-      const modal = document.getElementById('projectModal');
-      const escapeHtml = v => String(v).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-      const pad2 = n => String(n).padStart(2, '0');
+      // ---------- Contact form: sent through FormSubmit; says "sent" only when it really was ----------
+      const CONTACT_EMAIL = 'jackjhg609@gmail.com'; // address that receives enquiries
+      const contactDialog = document.getElementById('contactDialog');
+      const contactForm = document.getElementById('contactForm');
+      const contactStatus = document.getElementById('contactStatus');
+      const contactSubmit = document.getElementById('contactSubmit');
+      const closeContact = () => contactDialog.close();
+      document.querySelectorAll('[data-contact]').forEach(el => el.addEventListener('click', e => {
+        e.preventDefault();
+        contactDialog.classList.remove('is-sent');
+        contactStatus.textContent = '';
+        contactDialog.showModal();
+        document.documentElement.style.overflow = 'hidden';
+      }));
+      contactDialog.addEventListener('close', () => { document.documentElement.style.overflow = ''; });
+      contactDialog.addEventListener('click', e => { if (e.target === contactDialog) closeContact(); });
+      document.getElementById('contactClose').addEventListener('click', closeContact);
+      document.getElementById('contactDoneClose').addEventListener('click', closeContact);
+      contactForm.addEventListener('input', e => e.target.closest('.contact-field')?.classList.remove('invalid'));
 
-      projectGrid.innerHTML = projects.map(p => `<button class="project-tile" type="button" data-project="${escapeHtml(p.slug)}" data-category="${escapeHtml(p.category)}" aria-label="View ${escapeHtml(p.name)}">
-        <span class="tile-top"><span class="year">${escapeHtml(p.year)}</span><span class="tags">${p.tags.map(escapeHtml).join(' · ')}</span></span>
-        <span class="tile-content"><span class="tile-name">${escapeHtml(p.name)}</span><span class="tile-type">${escapeHtml(p.title)}</span></span>
-        <span class="tile-image-wrap"><img class="tile-image" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.alt)}" loading="lazy"></span>
-        <span class="tile-bottom"><span>${escapeHtml(p.client)}</span><span class="open-mark" aria-hidden="true">↗</span></span>
-      </button>`).join('');
-      document.getElementById('totalProjects').textContent = pad2(projects.length);
-      document.getElementById('projectCount').textContent = pad2(projects.length);
-      document.getElementById('filterCount').textContent = pad2(projects.length);
-
-      const tiles = [...projectGrid.querySelectorAll('.project-tile')];
-      tiles.forEach(tile => tile.addEventListener('click', () => openProject(tile.dataset.project)));
-      if (canHover) {
-        tiles.forEach(tile => {
-          tile.addEventListener('mouseenter', () => wallCursor.classList.add('is-visible'));
-          tile.addEventListener('mouseleave', () => wallCursor.classList.remove('is-visible'));
-          tile.addEventListener('mousemove', e => {
-            tile.style.setProperty('--image-tilt', `${((e.clientX - tile.getBoundingClientRect().left) / tile.clientWidth - 0.5) * 3}deg`);
+      contactForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        const required = [...contactForm.querySelectorAll('[required]')];
+        required.forEach(el => el.closest('.contact-field').classList.toggle('invalid', !el.checkValidity()));
+        const firstBad = required.find(el => !el.checkValidity());
+        if (firstBad) {
+          contactStatus.textContent = firstBad.type === 'email' && firstBad.value ? 'Please enter a valid email address.' : 'Please fill in your name, email and idea.';
+          firstBad.focus();
+          return;
+        }
+        const data = Object.fromEntries(new FormData(contactForm));
+        if (data._honey) return;
+        if (!CONTACT_EMAIL) { contactStatus.textContent = 'Sorry — the form is not connected yet.'; return; }
+        contactSubmit.disabled = true;
+        contactSubmit.textContent = 'Sending…';
+        contactStatus.textContent = '';
+        try {
+          const res = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({ ...data, _replyto: data.email, _subject: `New project enquiry from ${data.name}`, _template: 'table', _captcha: 'false' })
           });
-        });
-        // the whole wall leans gently toward the cursor
-        wallStage.addEventListener('mousemove', e => {
-          const r = wallStage.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
-          wallEnv.style.setProperty('--mx', `${-x * 12}px`);
-          wallEnv.style.setProperty('--my', `${-y * 8}px`);
-          wallEnv.style.setProperty('--tilt', `${x * 1.2}deg`);
-          wallCursor.style.left = `${e.clientX}px`;
-          wallCursor.style.top = `${e.clientY}px`;
-        });
-        wallStage.addEventListener('mouseleave', () => {
-          wallEnv.style.setProperty('--mx', '0px');
-          wallEnv.style.setProperty('--my', '0px');
-          wallCursor.classList.remove('is-visible');
-        });
-      }
-
-      document.getElementById('filterOptions').innerHTML = categories.map((c, i) =>
-        `<button class="filter-option" type="button" data-filter="${escapeHtml(c)}" aria-pressed="${i === 0}">${escapeHtml(c)}</button>`).join('');
-      document.querySelectorAll('.filter-option').forEach(btn => btn.addEventListener('click', () => applyFilter(btn.dataset.filter)));
-      function applyFilter(category) {
-        let shown = 0;
-        tiles.forEach(tile => {
-          const visible = category === 'All' || tile.dataset.category === category;
-          tile.classList.toggle('filtered-out', !visible);
-          if (visible) shown++;
-        });
-        document.querySelectorAll('.filter-option').forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.filter === category)));
-        document.getElementById('projectCount').textContent = pad2(shown);
-        document.getElementById('filterCount').textContent = pad2(shown);
-        setFilterOpen(false);
-      }
-      function setFilterOpen(open) {
-        filterPopover.classList.toggle('open', open);
-        filterButton.setAttribute('aria-expanded', String(open));
-      }
-      filterButton.addEventListener('click', () => setFilterOpen(!filterPopover.classList.contains('open')));
-      document.addEventListener('click', e => {
-        if (!filterPopover.contains(e.target) && !filterButton.contains(e.target)) setFilterOpen(false);
+          const result = await res.json().catch(() => ({}));
+          if (!res.ok || String(result.success) !== 'true') throw new Error(result.message || res.status);
+          contactForm.reset();
+          contactDialog.classList.add('is-sent');
+        } catch (err) {
+          contactStatus.textContent = 'Sorry, your message could not be sent. Please try again in a moment.';
+        } finally {
+          contactSubmit.disabled = false;
+          contactSubmit.textContent = 'Send message';
+        }
       });
-
-      function setView(mode) {
-        wallStage.classList.toggle('view-list', mode === 'list');
-        document.getElementById('gridView').setAttribute('aria-pressed', String(mode === 'grid'));
-        document.getElementById('listView').setAttribute('aria-pressed', String(mode === 'list'));
-      }
-      document.getElementById('gridView').addEventListener('click', () => setView('grid'));
-      document.getElementById('listView').addEventListener('click', () => setView('list'));
-
-      function openProject(slug) {
-        const p = projects.find(item => item.slug === slug);
-        if (!p) return;
-        document.getElementById('modalImage').src = p.image;
-        document.getElementById('modalImage').alt = p.alt;
-        document.getElementById('modalTitle').textContent = p.name;
-        document.getElementById('modalDescription').textContent = p.description;
-        document.getElementById('modalMeta').textContent = `${p.year} / ${p.category} / ${p.tags.join(' · ')}`;
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        wallCursor.classList.remove('is-visible');
-        document.getElementById('modalClose').focus();
-      }
-      function closeProject() {
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-      }
-      document.getElementById('modalClose').addEventListener('click', closeProject);
-      modal.addEventListener('click', e => { if (e.target === modal) closeProject(); });
-      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeProject(); });
 
       // ---------- Night sky: twinkling stars, fading into dawn near the bottom ----------
       // Static stars behind the cover's closing logo
@@ -2805,7 +2499,7 @@
         // fixed canvas: clip it so it never paints over the cinematic cover
         sky.style.clipPath = pr.top > 0 ? `inset(${pr.top}px 0 0 0)` : 'none';
 
-        // dawn rises as the dawn section scrolls in, and stays for the works wall after it
+        // dawn rises as the dawn section scrolls in, and stays for the FAQ after it
         const dawn = clamp01((H * 1.1 - dawnSection.getBoundingClientRect().top) / H);
         if (!calm) dawnSun.style.setProperty('--rise', dawn.toFixed(3));
 
